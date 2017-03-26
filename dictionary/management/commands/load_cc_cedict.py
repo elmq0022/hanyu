@@ -25,16 +25,18 @@ class Command(BaseCommand):
         (?P<pin_yin>[a-z\d\s]+)             # pronunc pattern
         \]                                  # end pronunc
         \s+                                 # spaces
-        (?P<english_equivalents>/.+/)       # definitions
+        /                                   # start the english equivalents
+        (?P<english_equivalents>.+)         # definitions
+        /                                   # end the english equivalents
         '''
         self.valid_entries = re.compile(pattern, re.M|re.I|re.X)
+        self.url = r'https://www.mdbg.net/chinese/export/cedict/cedict_1_0_ts_utf-8_mdbg.zip'
 
     def download_dict(self):
         '''
         Download dictionary zip file from ??? and return the contents as a string
         '''
-        url = r'https://www.mdbg.net/chinese/export/cedict/cedict_1_0_ts_utf-8_mdbg.zip'
-        r = requests.get(url)
+        r = requests.get(self.url)
         z = zipfile.ZipFile(io.BytesIO(r.content))
         z.extractall()
         file_name = z.namelist()[0]
@@ -45,8 +47,15 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         pass
 
+    def delete_entries_from_db(self):
+        models.Definition.objects.all().delete()
+        models.Entry.objects.all().delete()
+
     def add_to_db(self, matches):
         count = 0
+        entries = []
+        definitions = []
+
         for i, match in enumerate(matches):
             entry = models.Entry(
                 traditional=match['traditional'],
@@ -54,20 +63,32 @@ class Command(BaseCommand):
                 pronunciation=match['pin_yin'],
                 order=i
             )
-            entry.save()
+            entries.append(entry)
             count += 1
-            for j, item in enumerate(match['english_equivalents'].split('/')):
+
+        models.Entry.objects.bulk_create(entries)
+
+        for i, match in enumerate(matches):
+            for j, item in enumerate(match['english_equivalents'].strip().split('/')):
                 definition = models.Definition(
-                    entry=entry,
+                    entry_id=i,
                     order=j,
                     text=item
                 )
-                definition.save()
+                definitions.append(definition)
 
-        print(count)
+        models.Definition.objects.bulk_create(definitions)
+        print("There were {} entries inserted into the database".format(count))
 
     def handle(self, *args, **options):
+        print("Downloading dictionary from {}".format(self.url))
         text = self.download_dict()
-        matches = self.valid_entries.finditer(text)
+        print("Download complete")
+
+        print("Deleting entries from database")
+        self.delete_entries_from_db()        
+        
+        print("Entering data into database")
+        matches = list(self.valid_entries.finditer(text))
         self.add_to_db(matches)
         print('done')
