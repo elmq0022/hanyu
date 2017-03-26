@@ -5,7 +5,7 @@ class Entry(models.Model):
     simple = models.CharField(max_length=100)
     traditional = models.CharField(max_length=100)
     pronunciation = models.CharField(max_length=100)
-    order = models.IntegerField()
+    order = models.IntegerField(primary_key=True)
 
     def __str__(self):
         return '{0}: {1}'.format(self.simple, self.pronunciation)
