@@ -2,9 +2,9 @@ from django.db import models
 
 
 class Entry(models.Model):
-    simple = models.CharField(max_length=100)
-    traditional = models.CharField(max_length=100)
-    pronunciation = models.CharField(max_length=100)
+    simple = models.CharField(max_length=255)
+    traditional = models.CharField(max_length=255)
+    pronunciation = models.CharField(max_length=255)
     order = models.IntegerField(primary_key=True)
 
     def __str__(self):
