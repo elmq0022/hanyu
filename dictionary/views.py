@@ -4,19 +4,24 @@ Views for the dictionary application.
 
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from django.contrib.postgres.search import SearchVector
 
-from .forms import SearchForm
+from . import forms
+from . import models
 
 def search(request):
     '''
     This is a first crack at a basic search interface.
     '''
     if request.method == 'POST':
-        form = SearchForm(request.POST)
+        form = forms.SearchForm(request.POST)
         if form.is_valid():
-            # TODO: Make this do someting.
-            return HttpResponseRedirect('some where')
+            search_text = form.cleaned_data['search_text']
+            search_vector = SearchVector('simple', 'traditional', 'pronunciation')
+            results = models.Entry.objects.annotate(search=search_vector).filter(search=search_text)
+            form = forms.SearchForm()
+            return render(request, 'dictionary/search.html', {'form': form, 'results': results,})
     else:
-        form = SearchForm()
+        form = forms.SearchForm()
 
     return render(request, 'dictionary/search.html', {'form': form})
