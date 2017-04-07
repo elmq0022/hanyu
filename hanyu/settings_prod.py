@@ -20,4 +20,4 @@ DATABASES = {
 
 DEBUG = False
 
-SECERET_KEY = os.environ['DJANGO_SECRET_KEY']
+SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
