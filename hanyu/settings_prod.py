@@ -1,6 +1,11 @@
-from hanyu.settings_base import *
-import os
+'''
+This module contains the production specific settings.
+'''
 
+import os
+from hanyu.settings_base import *
+
+ALLOWED_HOSTS = ["54.69.87.237",]
 
 DATABASES = {
     'default': {
@@ -13,4 +18,6 @@ DATABASES = {
     }
 }
 
-ALLOWED_HOSTS = ["54.69.87.237",]
+DEBUG = False
+
+SECERET_KEY = os.environ['DJANGO_SECRET_KEY']
