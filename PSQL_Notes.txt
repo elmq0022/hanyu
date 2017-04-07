@@ -1,0 +1,12 @@
+loging into db
+- $psql -U hanyu hanyu_db 
+
+general superuser account on postgres bigsql db;
+- $psql -U postgres
+
+connecting to a db from a general log-in
+- # \connect db_name
+
+get the pg_trm up and running
+- $ CREATE EXTENSION pg_trm
+- Must be super user.

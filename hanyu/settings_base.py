@@ -19,11 +19,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '91oqzf9f0(*vkge+t65359da_jdl^fdqv)*g8_edjaqdr83nk&'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -37,6 +32,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.postgres',
+    'django.contrib.postgres.search',
+    'bootstrap3',
     'dictionary',
 ]
 
@@ -55,7 +53,7 @@ ROOT_URLCONF = 'hanyu.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,21 +67,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'hanyu.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/1.10/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'hanyu_db',
-        'USER': 'hanyu',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
-}
 
 
 # Password validation

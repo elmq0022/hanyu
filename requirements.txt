@@ -1,0 +1,4 @@
+Django==1.10.5
+django-bootstrap3==8.2.2
+psycopg2==2.7.1
+requests==2.13.0
