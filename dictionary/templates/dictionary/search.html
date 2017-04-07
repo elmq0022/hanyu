@@ -11,8 +11,10 @@
         {% bootstrap_form form %}
         <button type="submit" class="btn btn-primary">Search</button>
     </form>
+</div>
 
     <hr />
+<div class="container">
     {% if results%}
         {% for r in results %}
             {{ r }} : {{ r.definitions }}
