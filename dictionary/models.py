@@ -2,19 +2,10 @@ from django.db import models
 
 
 class Entry(models.Model):
-    simple = models.CharField(max_length=255)
     traditional = models.CharField(max_length=255)
-    pronunciation = models.CharField(max_length=255)
-    order = models.IntegerField(primary_key=True)
+    simple = models.CharField(max_length=255)
+    pin_yin = models.CharField(max_length=255)
+    definitions = models.TextField()
 
     def __str__(self):
-        return '{0}: {1}'.format(self.simple, self.pronunciation)
-
-
-class Definition(models.Model):
-    entry = models.ForeignKey(Entry)
-    order = models.IntegerField()
-    text = models.TextField()
-
-    def __str__(self):
-        return '{0} for {1}'.format(str(self.order), str(self.entry))
+        return '{0}: {1}'.format(self.simple, self.pin_yin)

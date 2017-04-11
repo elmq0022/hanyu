@@ -5,24 +5,21 @@
 
 
 {% block body %}
+<div class="container">
     <form method="POST" action="" >
         {% csrf_token %}
-        {#  form.as_p #}
         {% bootstrap_form form %}
-        <input type="submit" value="search" class="btn btn-primary">
+        <button type="submit" class="btn btn-primary">Search</button>
     </form>
 
     <hr />
     {% if results%}
         {% for r in results %}
-            {{ r }}    
-            <ul>
-                {% for d in r.definition_set.all %}
-                    <li>{{ d.text }}</li>
-                {% endfor %}
-            </ul>
+            {{ r }} : {{ r.definitions }}
+            <br />
         {% endfor %}
     {% else %}
         No results to display.
     {% endif %}
+</div>
 {% endblock body %}
