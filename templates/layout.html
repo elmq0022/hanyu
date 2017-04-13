@@ -44,14 +44,16 @@
       </div>
 
       <div id="navbar" class="navbar-collapse collapse">
-      {% if request.path != "/accounts/login/" %}
+      {% url 'accounts:login' as login_url %}
+      {% url 'accounts:logout' as logout_url %}
+      {% if request.path !=  login_url  %}
         {% if  user.is_authenticated %}
-          <form class="navbar-form navbar-right" action="/accounts/logout/" method="POST">
+          <form class="navbar-form navbar-right" action="{{ logout_url }}" method="POST">
             {% csrf_token %}
             <button type="submit" class="btn btn-success">Log Out</button>
           </form>
         {% else %}
-          <form class="navbar-form navbar-right" action="/accounts/login/" method="POST">
+          <form class="navbar-form navbar-right" action="{{ login_url }}" method="POST">
             {% csrf_token %}
             <div class="form-group">
               <input  type="text" 
@@ -76,7 +78,6 @@
   </nav>
 
   {% block body %} {% endblock body %}
-
 
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
