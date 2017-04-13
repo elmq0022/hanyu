@@ -1,7 +1,9 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse, reverse_lazy
+from django.http import HttpResponseRedirect
 from django.views import generic
+from django.views.generic import TemplateView
 
 from . import forms
 
@@ -33,3 +35,13 @@ class SignUpView(generic.CreateView):
     form_class = forms.UserCreateForm
     success_url = reverse_lazy('login')
     template_name = 'accounts/signup.html'
+
+
+
+class Home(TemplateView):
+    template_name = 'accounts/home.html'
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('hanyu:home'))
+        return super().get(request, *args, **kwargs)
