@@ -10,7 +10,7 @@ from . import forms
 
 class LoginView(generic.FormView):
     form_class = AuthenticationForm
-    success_url = reverse_lazy('dictionary:search') #TODO: Change this!
+    success_url = reverse_lazy('accounts:home')
     template_name = 'accounts/login.html'
 
     def get_form(self, form_class=None):
@@ -24,7 +24,7 @@ class LoginView(generic.FormView):
 
 
 class LogoutView(generic.RedirectView):
-    url = reverse_lazy('dictionary:search')
+    url = reverse_lazy('home')
 
     def get(self, request, *args, **kwargs):
         logout(request)
@@ -35,7 +35,6 @@ class SignUpView(generic.CreateView):
     form_class = forms.UserCreateForm
     success_url = reverse_lazy('login')
     template_name = 'accounts/signup.html'
-
 
 
 class Home(TemplateView):
