@@ -2,26 +2,30 @@
 Views for the dictionary application.
 '''
 
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
 from django.contrib.postgres.search import SearchVector
+from django.views.generic.edit import FormView
 
-from . import forms
-from . import models
+from . import forms, models
 
-def search(request):
+
+class SearchView(FormView):
     '''
-    This is a first crack at a basic search interface.
+    This is a full text search of all of the items in a Dictionary Entry.
     '''
-    if request.method == 'POST':
-        form = forms.SearchForm(request.POST)
+    template_name = 'dictionary/search.html'
+
+    def get(self, request, *args, **kwargs):
+        self.results = None
+        form = forms.SearchForm(request.GET or None)
         if form.is_valid():
             search_text = form.cleaned_data['search_text']
             search_vector = SearchVector('simple', 'traditional', 'pin_yin', 'definitions')
-            results = models.Entry.objects.annotate(search=search_vector).filter(search=search_text)
+            self.results = (
+                models.Entry.objects.annotate(search=search_vector).filter(search=search_text))
             form = forms.SearchForm()
-            return render(request, 'dictionary/search.html', {'form': form, 'results': results,})
-    else:
-        form = forms.SearchForm()
+        return self.render_to_response(self.get_context_data(form=form))
 
-    return render(request, 'dictionary/search.html', {'form': form})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['results'] = self.results
+        return context
