@@ -1,0 +1,8 @@
+{% extends "nav_bar.html" %}
+
+{% block body %}
+{{ block.super }}
+<div class="container">
+    Hello {{ user.username }}
+</div>
+{% endblock body %}
