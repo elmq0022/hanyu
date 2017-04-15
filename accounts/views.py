@@ -1,5 +1,6 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.views import generic
@@ -26,7 +27,7 @@ class LoginView(generic.FormView):
 class LogoutView(generic.RedirectView):
     url = reverse_lazy('home')
 
-    def get(self, request, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs):
         logout(request)
         return super().get(request, *args, **kwargs)
 
@@ -37,10 +38,10 @@ class SignUpView(generic.CreateView):
     template_name = 'accounts/signup.html'
 
 
-class Home(TemplateView):
+class Home(LoginRequiredMixin, TemplateView):
     template_name = 'accounts/home.html'
 
-    def get(self, request, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated():
             return HttpResponseRedirect(reverse('hanyu:home'))
         return super().get(request, *args, **kwargs)
