@@ -5,7 +5,7 @@ This module contains the production specific settings.
 import os
 from hanyu.settings_base import *
 
-ALLOWED_HOSTS = ["54.69.87.237",]
+ALLOWED_HOSTS = ['hanyu.pro','www.hanyu.pro',]
 
 DATABASES = {
     'default': {
