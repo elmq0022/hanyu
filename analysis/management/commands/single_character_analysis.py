@@ -16,6 +16,9 @@ class Command(BaseCommand):
         super().__init__()
 
     def handle(self, *args, **options):
+        '''
+        Article is located at: https://zh.wikipedia.org/zh-cn/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD
+        '''
         with open(os.path.join(self.base_dir, 'resources', 'wiki_zh_china.xml'), encoding="utf-8") as f:
             article = f.read()
             tree = html.fromstring(article)
