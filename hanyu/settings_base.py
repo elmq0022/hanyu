@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
     'django.contrib.postgres.search',
     'bootstrap3',
+    'analysis',
     'accounts',
     'dictionary',
 ]
