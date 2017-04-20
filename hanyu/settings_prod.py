@@ -5,7 +5,7 @@ This module contains the production specific settings.
 import os
 from hanyu.settings_base import *
 
-ALLOWED_HOSTS = ['hanyu.pro','www.hanyu.pro',]
+ALLOWED_HOSTS = ['*',]
 
 DATABASES = {
     'default': {
@@ -21,3 +21,5 @@ DATABASES = {
 DEBUG = False
 
 SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')

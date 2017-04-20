@@ -1,0 +1,14 @@
+server {
+    listen 80;
+    server_name hanyu.pro www.hanyu.pro;
+	location = /favicon.ico { access_log off; log_not_found off; }
+
+	location /static {
+		root /home/ubuntu/hanyu;
+	}
+
+	location / {
+		include proxy_params;
+        proxy_pass http://unix:/home/ubuntu/hanyu/hanyu.sock;
+	}
+}
