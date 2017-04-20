@@ -4,5 +4,6 @@
 {{ block.super }}
 <div class="container">
     Hello {{ user.username }}
+    <p>Search the CC-CEDICT entries <a href="{% url 'dictionary:search' %}">here</a>.</p>
 </div>
 {% endblock body %}
