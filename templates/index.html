@@ -8,5 +8,7 @@
 {{ block.super }}
 <div class="container">
     <h1>Welcome to Hanyu: A Place to Learn Mandarin Chinese</h1>
+    <p>Register <a href="{% url 'accounts:signup' %}">here</a>.</p>
+    <p>Search the CC-CEDICT entries <a href="{% url 'dictionary:search' %}">here</a>.</p>
 </div>
 {% endblock body %}
