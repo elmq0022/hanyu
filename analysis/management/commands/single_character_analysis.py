@@ -4,6 +4,14 @@ from pprint import pprint
 from django.core.management.base import BaseCommand, CommandError
 from lxml import html
 
+from string import whitespace
+from string import ascii_letters 
+from string import digits
+from string import punctuation
+
+from collections import Counter
+# import regex as re
+
 
 class Command(BaseCommand):
     help = '''
@@ -14,6 +22,7 @@ class Command(BaseCommand):
     def __init__(self):
         self.base_dir = os.path.dirname(os.path.abspath(__file__))
         super().__init__()
+
 
     def handle(self, *args, **options):
         '''
@@ -26,4 +35,9 @@ class Command(BaseCommand):
             # content = tree.xpath(r'//*[@id="mw-content-text"]/p/text()|//*[@id="mw-content-text"]/p/*/text()')
             # content = tree.xpath(r'//*[@id="mw-content-text"]/p/descendant-or-self')
             content = tree.xpath(r'//*[@id="mw-content-text"]//text()')
-            pprint(content[500:600])
+            content = ''.join(content)
+            # content = re.sub(r"\p{P}+", "", content)
+            exclude = whitespace + digits + ascii_letters + punctuation
+            single_chars = [i for i in content if i not in exclude]
+            single_char_counts = Counter(single_chars)
+            pprint(single_char_counts.most_common(30))
