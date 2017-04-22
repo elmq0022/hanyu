@@ -12,7 +12,7 @@ from string import punctuation
 from collections import Counter
 # import regex as re
 
-
+from nltk.tokenize import stanford_segmenter
 
 class Command(BaseCommand):
     help = '''
@@ -37,7 +37,22 @@ class Command(BaseCommand):
         # content = tree.xpath(r'//*[@id="mw-content-text"]/p/descendant-or-self')
         content = tree.xpath(r'//*[@id="mw-content-text"]//text()')
         content = ''.join(content)
-        exclude = whitespace + digits + ascii_letters + punctuation
-        single_chars = [i for i in content if i not in exclude]
-        single_char_counts = Counter(single_chars)
-        pprint(single_char_counts.most_common(30))
+        STFD_SEG_DIR = os.path.join(self.base_dir,'stanford_segmenter_resources', 'stanford-segmenter-2016-10-31') 
+        STFD_SEG = os.path.join(STFD_SEG_DIR, 'stanford-segmenter-3.7.0.jar')
+        SLF4J = os.path.join(STFD_SEG_DIR, 'slf4j-api-1.7.25.jar')
+        SIHAN_DICT = os.path.join(STFD_SEG_DIR, 'data')
+        MODEL = os.path.join(STFD_SEG_DIR, 'data', 'pku.gz')
+        DICT = os.path.join(STFD_SEG_DIR, 'data', 'dict-chris6.ser.gz')
+
+        os.environ['JAVAHOME'] = r'C:\Program Files\Java\jre1.8.0_131\bin\java.exe'
+
+        s = stanford_segmenter.StanfordSegmenter(
+            path_to_jar=STFD_SEG,
+            path_to_slf4j=SLF4J,
+            path_to_sihan_corpora_dict=SIHAN_DICT,
+            path_to_model=MODEL,
+            path_to_dict=DICT
+            )
+
+        sentence = u"这是斯坦福中文分词器测试"
+        pprint(s.segment(sentence))
