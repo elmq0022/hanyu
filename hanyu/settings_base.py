@@ -108,3 +108,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Files Paths for the Stanford Segmenter. This is a java library accesed via
+# an interface in nltk. 
+STFD_SEG_DIR = os.path.join(BASE_DIR,'stanford_segmenter_resources', 'stanford-segmenter-2016-10-31') 
+STFD_SEG = os.path.join(STFD_SEG_DIR, 'stanford-segmenter-3.7.0.jar')
+SLF4J = os.path.join(STFD_SEG_DIR, 'slf4j-api.jar')
+SIHAN_DICT = os.path.join(STFD_SEG_DIR, 'data')
+MODEL = os.path.join(STFD_SEG_DIR, 'data', 'pku.gz')
+DICT = os.path.join(STFD_SEG_DIR, 'data', 'dict-chris6.ser.gz')
+JAVAHOME = r'C:\Program Files\Java\jre1.8.0_131\bin\java.exe'
+CLASSPATH = SLF4J 

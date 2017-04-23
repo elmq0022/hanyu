@@ -2,4 +2,4 @@
 *.swp
 *.sqlite3
 scratch/
-analysis/management/commands/stanford_segmenter_resources/
+stanford_segmenter_resources/
