@@ -3,3 +3,4 @@
 *.sqlite3
 scratch/
 stanford_segmenter_resources/
+.vscode/
