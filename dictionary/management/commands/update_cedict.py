@@ -42,6 +42,8 @@ class Command(BaseCommand):
         /                                   # end the defintions 
         '''
         self.valid_entries = re.compile(pattern, re.M|re.I|re.X)
+        self.slash = re.compile(r'/')
+
         self.url = r'https://www.mdbg.net/chinese/export/cedict/cedict_1_0_ts_utf-8_mdbg.zip'
 
     def download_dict(self):
@@ -68,13 +70,13 @@ class Command(BaseCommand):
                     traditional=match['traditional'],
                     simple=match['simple'],
                     pin_yin=match['pin_yin'],
-                    definitions=match['definitions']
+                    definitions=self.slash.sub(r' / ', match['definitions'])
                 )
                 entries.append(entry)
                 added += 1
-            elif all_entries[key][1] != match['definitions']:
-                entry = Entry.objects.get(all_entries[key][0])
-                entry.definitions = match['definitions']
+            elif all_entries[key][1] != self.slash.sub(r' / ', match['definitions']):
+                entry = models.Entry.objects.get(all_entries[key][0])
+                entry.definitions = self.slash.sub(r' / ', match['definitions'])
                 entry.save()
                 updated += 1
         models.Entry.objects.bulk_create(entries)
