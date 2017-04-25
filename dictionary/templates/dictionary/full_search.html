@@ -16,19 +16,15 @@
 
     <hr />
 <div class="container">
-    <p> {{ search_terms }} </p>
-    <p> {{ searched }} </p>
-    <p> {{ results }} </p>
-    <p> {{ results.search_terms }} </p>
-
-    
+    {{ searched }}
+    <br />
     {% if search_terms %}
-        {% for search_term in search_terms %}
-                {{ search_term }} 
-            <ul>
-            {% for result in results.search_term %} 
-                <li> {{ result }} </li>
-            {% endfor %}
+        {% for key, value in results.items %}
+             {{ key }} 
+             <ul>
+             {% for i in value %}
+                <li> {{ i.definitions }} </li>
+             {% endfor %}
             </ul>
             <br />
         {% endfor %}
