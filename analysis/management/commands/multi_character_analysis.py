@@ -21,13 +21,7 @@ class Command(BaseCommand):
         self.base_dir = os.path.dirname(os.path.abspath(__file__))
         os.environ['JAVAHOME'] = settings.JAVAHOME
         os.environ['CLASSPATH'] = settings.CLASSPATH
-        self.segmenter = stanford_segmenter.StanfordSegmenter(
-            path_to_jar=settings.STFD_SEG,
-            path_to_slf4j=settings.SLF4J,
-            path_to_sihan_corpora_dict=settings.SIHAN_DICT,
-            path_to_model=settings.MODEL,
-            path_to_dict=settings.DICT
-            )
+        self.segmenter = stanford_segmenter.StanfordSegmenter(**settings.STFORD_SEG_SETTINGS)
         self.entries = {e.simple: e for e in Entry.objects.all()}
         super().__init__()
 
