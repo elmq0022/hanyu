@@ -48,7 +48,7 @@ class Command(BaseCommand):
             article = f.read()
         tree = html.fromstring(article)
         content = tree.xpath(r'//*[@id="mw-content-text"]//text()')
-        return ''.join(content)
+        return ' '.join(content)
 
     def set_character_counts(self):
         character_counts = Count.objects.filter(count_type=Count.CHARACTER).all()
