@@ -4,17 +4,16 @@ from string import ascii_letters, digits, punctuation, whitespace
 
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
-from django.db.models.functions import Length
 from lxml import html
 from nltk.tokenize import stanford_segmenter
 
-from analysis.models import SingleCount, MultiCount
+from analysis.models import Count
 from dictionary.models import Entry
 
 
 class Command(BaseCommand):
     help = '''
-    parse a list of html documents and bag the occurence of dictionary entries.  
+    parse a list of documents and bag the occurences of dictionary entries.  
     '''
 
     def __init__(self):
@@ -33,42 +32,47 @@ class Command(BaseCommand):
         content = tree.xpath(r'//*[@id="mw-content-text"]//text()')
         return ''.join(content)
 
-    def set_single_counts(self):
-        single_counts = SingleCount.objects.all()
-        self.single_counts = Counter({item.entry.simple: item.count for item in single_counts})
-        SingleCount.objects.all().delete()
+    def set_character_counts(self):
+        character_counts = Count.objects.filter(count_type=Count.CHARACTER).all()
+        self.character_counts = Counter({item.entry.simple: item.count for item in character_counts})
 
-    def update_single_counts(self, content):
+    def update_character_counts(self, content):
         content = ''.join(content)
         exclude = whitespace + digits + ascii_letters + punctuation
         single_chars = [i for i in content if i not in exclude]
-        self.single_counts.update(Counter(single_chars))
+        self.character_counts.update(Counter(single_chars))
 
-    def set_multi_counts(self):
-        multi_counts = MultiCount.objects.all()
-        self.multi_counts = Counter({item.entry.simple: item.count for item in multi_counts})
-        MultiCount.objects.all().delete()
+    def set_word_counts(self):
+        word_counts = Count.objects.filter(count_type=Count.WORD).all()
+        self.word_counts = Counter({item.entry.simple: item.count for item in word_counts})
 
-    def update_multi_counts(self, content):
+    def update_word_counts(self, content):
         results = self.segmenter.segment(content).split()
-        self.multi_counts.update(Counter(results))
+        self.word_counts.update(Counter(results))
 
-    def load_to_db(self, Model, counts):
+    def load_to_db(self, counts, count_type):
         records = []
         for phrase, count in counts.items():
             if phrase in self.entries:
-                records.append(Model(entry=self.entries[phrase], count=count))
-        Model.objects.bulk_create(records)
+                records.append(Count(entry=self.entries[phrase],
+                                     count=count,
+                                     count_type=count_type
+                                    )
+                              )
+        Count.objects.bulk_create(records)
 
     def handle(self, *args, **options):
-        self.set_single_counts()
-        self.set_multi_counts()
+        self.set_character_counts()
+        self.set_word_counts()
 
         # for file in files:  TODO: make this a loop for a directory of files...
         content = self.extract_text_from_html()
-        self.update_single_counts(content)
-        self.update_multi_counts(content)
+        self.update_character_counts(content)
+        self.update_word_counts(content)
+
+        #Delete
+        Count.objects.all().delete()
 
         #Load
-        self.load_to_db(SingleCount, self.single_counts)
-        self.load_to_db(MultiCount, self.multi_counts)
+        self.load_to_db(self.character_counts, Count.CHARACTER)
+        self.load_to_db(self.word_counts, Count.WORD)

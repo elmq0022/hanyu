@@ -1,14 +1,9 @@
 from django.contrib import admin
-from .models import SingleCount, MultiCount
+from .models import Count
 
 
-class SingleCountAdmin(admin.ModelAdmin):
+class CountAdmin(admin.ModelAdmin):
     pass
 
 
-class MultiCountAdmin(admin.ModelAdmin):
-    pass
-
-
-admin.site.register(SingleCount, SingleCountAdmin)
-admin.site.register(MultiCount, MultiCountAdmin)
+admin.site.register(Count, CountAdmin)
