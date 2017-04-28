@@ -24,8 +24,26 @@ class Command(BaseCommand):
         self.entries = {e.simple: e for e in Entry.objects.all()}
         super().__init__()
 
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '-f',
+            '--files',
+            nargs='+',
+            dest='files',
+            default=[os.path.join(self.base_dir, 'resources', 'wiki_zh_china.xml')],
+            help='segment the specified documents and add the count of their occurence to the Count table'
+        )
+        parser.add_argument(
+            '-d',
+            '--delete',
+            action='store_true',
+            dest='delete',
+            default=False,
+            help='Delete all the items from the Count table'
+        )
+
     def extract_text_from_html(self, file_path=None, encoding='utf-8'):
-        file_path = os.path.join(self.base_dir, 'resources', 'wiki_zh_china.xml') #TODO: Fix this!
         with open(file_path, encoding="utf-8") as f:
             article = f.read()
         tree = html.fromstring(article)
@@ -62,17 +80,21 @@ class Command(BaseCommand):
         Count.objects.bulk_create(records)
 
     def handle(self, *args, **options):
-        self.set_character_counts()
-        self.set_word_counts()
+        if options['files']: 
+            self.set_character_counts()
+            self.set_word_counts()
 
-        # for file in files:  TODO: make this a loop for a directory of files...
-        content = self.extract_text_from_html()
-        self.update_character_counts(content)
-        self.update_word_counts(content)
+            for file in options['files']: 
+                content = self.extract_text_from_html(file)
+                self.update_character_counts(content)
+                self.update_word_counts(content)
 
-        #Delete
-        Count.objects.all().delete()
+            #Delete all records 
+            Count.objects.all().delete()
 
-        #Load
-        self.load_to_db(self.character_counts, Count.CHARACTER)
-        self.load_to_db(self.word_counts, Count.WORD)
+            #Use bulk load to update
+            self.load_to_db(self.character_counts, Count.CHARACTER)
+            self.load_to_db(self.word_counts, Count.WORD)
+
+        if options['delete']:
+            Count.objects.all().delete()
