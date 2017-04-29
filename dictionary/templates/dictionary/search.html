@@ -18,7 +18,7 @@
 <div class="container">
     {% if results %}
         {% for r in results %}
-            {{ r }} : {{ r.definitions }}
+            <a href="{% url 'dictionary:entry' r.pk %}">{{ r }}</a>: {{ r.definitions }}
             <br />
         {% endfor %}
     {% else %}
