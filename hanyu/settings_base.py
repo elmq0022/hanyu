@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'analysis',
     'accounts',
     'dictionary',
+    'learning_tools',
 ]
 
 MIDDLEWARE = [
