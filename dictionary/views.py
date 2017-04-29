@@ -6,6 +6,7 @@ import os
 
 from django.conf import settings
 from django.contrib.postgres.search import SearchVector
+from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from nltk.tokenize import stanford_segmenter
 
@@ -68,3 +69,13 @@ class FullChineseSearchView(FormView):
         context['results'] = self.results
         context['searched'] = self.search_text
         return context
+
+
+class EntryView(TemplateView):
+    template_name = 'dictionary/entry.html'
+
+    def entry(self):
+        return models.Entry.objects.get(pk=self.kwargs['pk'])
+
+    def top_related(self):
+        return 'RELATED' # TODO: Fix this!

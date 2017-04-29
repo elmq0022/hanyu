@@ -5,5 +5,21 @@
 <div class="container">
     Hello {{ user.username }}
     <p>Search the CC-CEDICT entries <a href="{% url 'dictionary:search' %}">here</a>.</p>
+    <p>Search complete Chinese sentences <a href="{% url 'dictionary:full_search' %}">here</a>.</p>
+
+    <p>Top Characters to Learn</p> 
+    {% for character in  view.top_characters %}
+        <ul>
+            <li>{{ character.entry }}</li>
+        </ul>
+    {% endfor %}
+
+    <p>Top Words</p> 
+    {% for word in  view.top_words %}
+        <ul>
+            <li>{{ word.entry }}</li>
+        </ul>
+    {% endfor %}
+
 </div>
 {% endblock body %}
