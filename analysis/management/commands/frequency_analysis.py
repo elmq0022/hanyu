@@ -1,3 +1,4 @@
+import glob
 import os
 from collections import Counter
 from string import ascii_letters, digits, punctuation, whitespace
@@ -13,11 +14,10 @@ from dictionary.models import Entry
 
 class Command(BaseCommand):
     help = '''
-    parse a list of documents and bag the occurences of dictionary entries.  
+    Parse a list of documents and bag the occurences of dictionary entries.  
     '''
 
     def __init__(self):
-        self.base_dir = os.path.dirname(os.path.abspath(__file__))
         os.environ['JAVAHOME'] = settings.JAVAHOME
         os.environ['CLASSPATH'] = settings.CLASSPATH
         self.segmenter = stanford_segmenter.StanfordSegmenter(**settings.STFORD_SEG_SETTINGS)
@@ -27,15 +27,21 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            '-f',
-            '--files',
+            '-p',
+            '--path',
             nargs='+',
-            dest='files',
-            default=[os.path.join(self.base_dir, 'resources', 'wiki_zh_china.xml')],
-            help='segment the specified documents and add the count of their occurence to the Count table'
+            dest='path_or_file',
+            help='Segment a file or directory of files and add the occurences to the Count table'
         )
         parser.add_argument(
-            '-d',
+            '-e',
+            '--extension',
+            default='',
+            dest='extension',
+            help='File extension to filter by'
+        )
+        parser.add_argument(
+            '-D',
             '--delete',
             action='store_true',
             dest='delete',
@@ -47,7 +53,7 @@ class Command(BaseCommand):
         with open(file_path, encoding="utf-8") as f:
             article = f.read()
         tree = html.fromstring(article)
-        content = tree.xpath(r'//*[@id="mw-content-text"]//text()')
+        content = tree.xpath(r'//*[@id="mw-content-text"]//text()') # TODO: This shouldn't be hard-coded...
         return ' '.join(content)
 
     def set_character_counts(self):
@@ -80,21 +86,31 @@ class Command(BaseCommand):
         Count.objects.bulk_create(records)
 
     def handle(self, *args, **options):
-        if options['files']: 
+        if options['path_or_file']:
             self.set_character_counts()
             self.set_word_counts()
 
-            for file in options['files']: 
+            full_paths = [os.path.join(os.getcwd(), path) for path in options['path_or_file']]
+            files = set()
+            for path in full_paths:
+                if os.path.isfile(path):
+                    files.add(path)
+                else:
+                    files |= set(glob.glob(path + '/*' + options['extension']))
+
+            for file in files:
                 content = self.extract_text_from_html(file)
                 self.update_character_counts(content)
                 self.update_word_counts(content)
 
-            #Delete all records 
+            # Delete all records
             Count.objects.all().delete()
 
-            #Use bulk load to update
+            # Use bulk load to update
             self.load_to_db(self.character_counts, Count.CHARACTER)
             self.load_to_db(self.word_counts, Count.WORD)
 
         if options['delete']:
-            Count.objects.all().delete()
+            ans = input('Drop all entries from the Count table [Y]/n: ').lower()
+            if ans == 'y' or ans == '':
+                Count.objects.all().delete()
