@@ -22,7 +22,7 @@ class Command(BaseCommand):
         The CC-CEDICT dictionary is a work in progress.
         The following regex pattern will match all well formed entries in the dictionary
         '''
-        pattern = r'''
+        entry_pattern = r'''
         (?P<traditional>\w+)                # first character
         \s+                                 # spaces
         (?P<simple>\w+)                     # second character
@@ -35,7 +35,10 @@ class Command(BaseCommand):
         (?P<definitions>.+)                 # definitions
         /                                   # end the defintions 
         '''
-        self.valid_entries = re.compile(pattern, re.M|re.I|re.X)
+
+        self.valid_entries = re.compile(entry_pattern, re.M|re.I|re.X)
+        self.slash = re.compile(r'/')
+
         self.url = r'https://www.mdbg.net/chinese/export/cedict/cedict_1_0_ts_utf-8_mdbg.zip'
 
     def download_dict(self):
@@ -59,7 +62,7 @@ class Command(BaseCommand):
                 traditional=match['traditional'],
                 simple=match['simple'],
                 pin_yin=match['pin_yin'],
-                definitions=match['definitions']
+                definitions=self.slash.sub(r' / ', match['definitions'])
             )
             entries.append(entry)
             count += 1

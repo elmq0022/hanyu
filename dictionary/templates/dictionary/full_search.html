@@ -1,0 +1,35 @@
+{% extends "nav_bar.html" %}
+{% load bootstrap3 %}
+
+{% block title %}Search{% endblock title %}
+
+
+{% block body %}
+{{ block.super }}
+<div class="container">
+    <form method="GET" action="" >
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+</div>
+
+    <hr />
+<div class="container">
+    {{ searched }}
+    <br />
+    {% if search_terms %}
+        {% for key, value in results.items %}
+             {{ key }} 
+             <ul>
+             {% for i in value %}
+                <li> {{ i.definitions }} </li>
+             {% endfor %}
+            </ul>
+            <br />
+        {% endfor %}
+    {% else %}
+        No results to display.
+    {% endif %}
+</div>
+{% endblock body %}
