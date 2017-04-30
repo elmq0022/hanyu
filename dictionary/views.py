@@ -79,3 +79,9 @@ class EntryView(TemplateView):
 
     def top_related(self):
         return 'RELATED' # TODO: Fix this!
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['entry'] = self.entry()
+        context['top_related'] = self.top_related()
+        return context

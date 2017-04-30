@@ -4,7 +4,7 @@ from django.db import models
 from dictionary.models import Entry
 
 
-class Word(models.Model):
+class WordLearningStatus(models.Model):
     UNLEARNED = 'UN'
     ACQUIRING = 'AC'
     LEARNED = 'LN'

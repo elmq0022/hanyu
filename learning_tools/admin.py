@@ -1,3 +1,9 @@
 from django.contrib import admin
+from .models import WordLearningStatus
 
-# Register your models here.
+
+class WordLearningStatusAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(WordLearningStatus, WordLearningStatusAdmin)
