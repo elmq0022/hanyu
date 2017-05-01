@@ -3,6 +3,7 @@ import os
 from collections import Counter
 from string import ascii_letters, digits, punctuation, whitespace
 
+import jieba
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from lxml import html
@@ -18,10 +19,9 @@ class Command(BaseCommand):
     '''
 
     def __init__(self):
-        os.environ['JAVAHOME'] = settings.JAVAHOME
-        os.environ['CLASSPATH'] = settings.CLASSPATH
-        self.segmenter = stanford_segmenter.StanfordSegmenter(**settings.STFORD_SEG_SETTINGS)
-        self.entries = {e.simple: e for e in Entry.objects.all()}
+        # os.environ['JAVAHOME'] = settings.JAVAHOME
+        # os.environ['CLASSPATH'] = settings.CLASSPATH
+        # self.segmenter = stanford_segmenter.StanfordSegmenter(**settings.STFORD_SEG_SETTINGS)
         super().__init__()
 
 
@@ -71,14 +71,15 @@ class Command(BaseCommand):
         self.word_counts = Counter({item.entry.simple: item.count for item in word_counts})
 
     def update_word_counts(self, content):
-        results = self.segmenter.segment(content).split()
-        self.word_counts.update(Counter(results))
+        segments = jieba.cut(content)
+        # results = self.segmenter.segment(content).split()
+        self.word_counts.update(Counter(segments))
 
-    def load_to_db(self, counts, count_type):
+    def load_to_db(self, counts, count_type, entries):
         records = []
-        for phrase, count in counts.items():
-            if phrase in self.entries:
-                records.append(Count(entry=self.entries[phrase],
+        for item, count in counts.items():
+            if item in entries:
+                records.append(Count(entry=entries[item],
                                      count=count,
                                      count_type=count_type
                                     )
@@ -107,8 +108,9 @@ class Command(BaseCommand):
             Count.objects.all().delete()
 
             # Use bulk load to update
-            self.load_to_db(self.character_counts, Count.CHARACTER)
-            self.load_to_db(self.word_counts, Count.WORD)
+            entries = {e.simple: e for e in Entry.objects.all()}
+            self.load_to_db(self.character_counts, Count.CHARACTER, entries)
+            self.load_to_db(self.word_counts, Count.WORD, entries)
 
         if options['delete']:
             ans = input('Drop all entries from the Count table [Y]/n: ').lower()

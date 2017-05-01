@@ -3,6 +3,7 @@
 *.sqlite3
 scratch/
 stanford_segmenter_resources/
+resources/
 .vscode/
 static/
 */migrations/*
