@@ -28,7 +28,7 @@ class Command(BaseCommand):
         (?P<simple>\w+)                     # second character
         \s+                                 # spaces
         \[                                  # start pronunc
-        (?P<pin_yin>[a-z\d\s]+)             # pronunc pattern
+        (?P<pin_yin>[a-z:\d\s]+)             # pronunc pattern
         \]                                  # end pronunc
         \s+                                 # spaces
         /                                   # start the defintions 
