@@ -48,17 +48,21 @@ class FullChineseSearchView(FormView):
         if form.is_valid():
             self.search_text = form.cleaned_data['search_text']
             self.search_terms = jieba.cut(self.search_text)
-            self.results = {} 
+            # self.results = {} 
+            self.results = [] 
 
             for search_term in self.search_terms:
                 entry = models.Entry.objects.filter(simple=search_term)
                 if entry:
-                    self.results[search_term] = entry
+                    # self.results[search_term] = entry
+                    self.results.append((search_term, entry))
                 else:
                     for character in search_term:
-                        self.results[character] = models.Entry.objects.filter(simple=character)
-
+                        # self.results[character] = models.Entry.objects.filter(simple=character)
+                        self.results.append((character,
+                                             models.Entry.objects.filter(simple=character)))
             form = forms.SearchForm()
+
         return self.render_to_response(self.get_context_data(form=form))
 
     def get_context_data(self, **kwargs):
