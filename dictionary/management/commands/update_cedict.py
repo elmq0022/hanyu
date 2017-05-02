@@ -2,61 +2,20 @@
 '''
 This module will update the Entry table using the CC-CEDIct Chinese to English dictionary located
 at https://www.mdbg.net/chinese/export/cedict/cedict_1_0_ts_utf-8_mdbg.zip
-
 *** For now making the assumption that a word or phrase will not be removed from the database ***
 *** For now also assuming there won't be changes to entries provided the database is maintained regularly ***
-
-TODO: There is a ton of code duplication here.  I should look at refactoring this. Just want to get it running right now.
 '''
 
-import io
-import re
-import zipfile
 
-import requests
 from django.core.management.base import BaseCommand, CommandError
 
 from dictionary import models
+from ._base_cedict import BaseCEDictCommand
 
 
-class Command(BaseCommand):
-    help = 'loads the online version of CC-CEDICT Chinese to English dictionary into the database'
-
-    def __init__(self):
-        super().__init__()
-        '''
-        The CC-CEDICT dictionary is a work in progress.
-        The following regex pattern will match all well formed entries in the dictionary
-        '''
-        pattern = r'''
-        (?P<traditional>\w+)                # first character
-        \s+                                 # spaces
-        (?P<simple>\w+)                     # second character
-        \s+                                 # spaces
-        \[                                  # start pronunc
-        (?P<pin_yin>[a-z\d\s:,]+)             # pronunc pattern
-        \]                                  # end pronunc
-        \s+                                 # spaces
-        /                                   # start the defintions 
-        (?P<definitions>.+)                 # definitions
-        /                                   # end the defintions 
-        '''
-        self.valid_entries = re.compile(pattern, re.M|re.I|re.X)
-        self.slash = re.compile(r'/')
-
-        self.url = r'https://www.mdbg.net/chinese/export/cedict/cedict_1_0_ts_utf-8_mdbg.zip'
-
-    def download_dict(self):
-        '''
-        Download Chinese-English dictionary zip file and return the contents as a string.
-        '''
-        r = requests.get(self.url)
-        z = zipfile.ZipFile(io.BytesIO(r.content))
-        z.extractall()
-        file_name = z.namelist()[0]
-        with z.open(file_name) as f:
-            text = f.read().decode("utf-8")
-        return text
+class Command(BaseCEDictCommand):
+    help = '''updates the database with information from the online version of CC-CEDICT 
+           Chinese to English dictionary into the database'''
 
     def update_db(self, matches):
         updated, added = 0, 0
