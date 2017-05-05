@@ -17,7 +17,7 @@ class WordLearningStatus(models.Model):
     user = models.ForeignKey(User)
     learning_status = models.CharField(max_length=2,
                                        choices=LEARNING_STATUS,
-                                       default='UN',
+                                       default=UNLEARNED,
                                       )
 
     def __str__(self):
