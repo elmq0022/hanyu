@@ -5,5 +5,4 @@ scratch/
 stanford_segmenter_resources/
 resources/
 .vscode/
-static/
 .cache
