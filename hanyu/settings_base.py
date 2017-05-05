@@ -35,9 +35,10 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
     'django.contrib.postgres.search',
     'bootstrap3',
-    'analysis',
     'accounts',
+    'analysis',
     'dictionary',
+    'learning_tools',
 ]
 
 MIDDLEWARE = [

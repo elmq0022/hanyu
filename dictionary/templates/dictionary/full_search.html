@@ -19,11 +19,11 @@
     {{ searched }}
     <br />
     {% if search_terms %}
-        {% for key, value in results.items %}
+        {% for key, value in results %}
              {{ key }} 
              <ul>
              {% for i in value %}
-                <li> {{ i.definitions }} </li>
+             <li> <a href="{% url 'dictionary:entry' i.pk %}">{{ i.definitions }}</a></li>
              {% endfor %}
             </ul>
             <br />

@@ -6,6 +6,8 @@ from django.http import HttpResponseRedirect
 from django.views import generic
 from django.views.generic import TemplateView
 
+from analysis.models import Count
+
 from . import forms
 
 
@@ -29,7 +31,7 @@ class LogoutView(generic.RedirectView):
 
     def dispatch(self, request, *args, **kwargs):
         logout(request)
-        return super().get(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
 
 class SignUpView(generic.CreateView):
@@ -41,7 +43,13 @@ class SignUpView(generic.CreateView):
 class Home(LoginRequiredMixin, TemplateView):
     template_name = 'accounts/home.html'
 
+    def top_characters(self):
+        return Count.objects.filter(count_type=Count.CHARACTER).all().order_by('-count')[:5] 
+
+    def top_words(self):
+        return Count.objects.filter(count_type=Count.WORD).all().order_by('-count')[:5] 
+
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated():
             return HttpResponseRedirect(reverse('hanyu:home'))
-        return super().get(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)

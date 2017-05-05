@@ -3,9 +3,8 @@
 *.sqlite3
 scratch/
 stanford_segmenter_resources/
+resources/
 .vscode/
-<<<<<<< HEAD
-=======
 static/
 */migrations/*
->>>>>>> fc8b914da1514204926d47cd1d61ba9832a9290b
+.cache
