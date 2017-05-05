@@ -1,4 +1,4 @@
 #!/bin/bash
 cd /home/ubuntu/hanyu
 source /home/ubuntu/.virtualenvs/hanyu/bin/activate
-gunicorn --bind unix:/home/ubuntu/hanyu/hanyu.sock hanyu.wsgi:application
+gunicorn --bind unix:/tmp/hanyu.sock hanyu.wsgi:application
