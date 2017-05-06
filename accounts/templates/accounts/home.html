@@ -1,8 +1,6 @@
-{% extends "nav_bar.html" %}
+{% extends "base.html" %}
 
-{% block body %}
-{{ block.super }}
-<div class="container">
+{% block content %}
     Hello {{ user.username }}
     <p>Search the CC-CEDICT entries <a href="{% url 'dictionary:search' %}">here</a>.</p>
     <p>Search complete Chinese sentences <a href="{% url 'dictionary:full_search' %}">here</a>.</p>
@@ -20,6 +18,4 @@
             <li>{{ word.entry }}</li>
         </ul>
     {% endfor %}
-
-</div>
-{% endblock body %}
+{% endblock content %}
