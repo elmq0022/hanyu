@@ -1,21 +1,6 @@
-{% extends "nav_bar.html" %}
-{% load bootstrap3 %}
+{% extends "base.html" %}
 
-{% block title %}Search{% endblock title %}
-
-
-{% block body %}
-{{ block.super }}
-<div class="container">
-    <form method="GET" action="" >
-        {% csrf_token %}
-        {% bootstrap_form form %}
-        <button type="submit" class="btn btn-primary">Search</button>
-    </form>
-</div>
-
-    <hr />
-<div class="container">
+{% block content %}
     {% if results %}
         {% for r in results %}
             <a href="{% url 'dictionary:entry' r.pk %}">{{ r }}</a>: {{ r.definitions }}
@@ -24,5 +9,4 @@
     {% else %}
         No results to display.
     {% endif %}
-</div>
-{% endblock body %}
+{% endblock content %}
