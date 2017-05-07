@@ -8,6 +8,7 @@ import jieba
 from django.conf import settings
 from django.contrib.postgres.search import SearchVector
 from django.views.generic import TemplateView
+from django.views.generic import ListView
 from django.views.generic.edit import FormView
 from nltk.tokenize import stanford_segmenter
 
@@ -86,4 +87,21 @@ class EntryView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['entry'] = self.entry()
         context['top_related'] = self.top_related()
+        return context
+
+
+class SearchAny(ListView):
+    template_name = 'dictionary/search.html'
+    # context_object_name = 'object'
+    model = models.Entry
+
+    def get_queryset(self):
+        search_text = self.request.GET.get('search_text')
+        search_vector = SearchVector('simple', 'traditional', 'pin_yin', 'definitions')
+        qs = models.Entry.objects.annotate(search=search_vector).filter(search=search_text)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(*kwargs)
+        context['radio'] = self.request.GET.get('search_type')
         return context

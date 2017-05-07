@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <p>The search type is: {{ radio }} </p>
+    {% if results %}
+        {% for entry in entry_list %}
+            <a href="{% url 'dictionary:entry' r.pk %}">{{ entry }}</a>: {{ entry.definitions }}
+            <br />
+        {% endfor %}
+    {% else %}
+        No results to display.
+    {% endif %}
+{% endblock content %}
