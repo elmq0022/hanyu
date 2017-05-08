@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
 
 class Home(TemplateView):
-    template_name = 'test.html'
+    template_name = 'full_page.html'
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated():

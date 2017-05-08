@@ -1,0 +1,32 @@
+{% extends "_base.html" %}
+
+{% block title  %}
+    Hanyu | Base
+{% endblock title %}
+
+{% block body %}
+  {% include "_header.html" %}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      {% include "_page-header.html" with page_name="Hanyu" page_description="Login Page" %} 
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      {% block content %}
+      <!-- Page Content Here -->
+      {% endblock content %}
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  {% include "_footer.html" %}
+  {% comment "test delete later" %}
+    {% include "_main-sidebar.html" %}
+    {% include "_breadcrumb.html" %}
+    {% include "_control-sidebar.html" %}
+  {% endcomment %}
+{% endblock body %}

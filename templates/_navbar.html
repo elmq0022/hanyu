@@ -10,14 +10,12 @@
   <!-- Navbar Right Menu -->
   <div class="navbar-custom-menu">
     <ul class="nav navbar-nav">
-
-      {% comment "temporaryily remove the following. May add back later." %}
-        {% include "_navbar/_messages.html" %}
-        {% include "_navbar/_notifications.html" %}
-        {% include "_navbar/_tasks.html" %}
-      {% endcomment %}
-      {% include "_navbar/_user-menu.html" %}
-
+        {% comment "" %}
+          {% include "_navbar/_messages.html" %}
+          {% include "_navbar/_notifications.html" %}
+          {% include "_navbar/_tasks.html" %}
+        {% endcomment %}
+        {% include "_navbar/_user-menu.html" %}
       <!-- Control Sidebar Toggle Button -->
       <li>
         <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
