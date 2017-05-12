@@ -1,0 +1,44 @@
+{% extends "_AdminLTE.html" %}
+{% load static %}
+
+{% block title %}
+<title>Hanyu | </title>
+{% endblock title %}
+
+{% block logo_mini %}HY{% endblock logo_mini %}
+{% block logo_lg %}Hanyu{% endblock logo_lg %}
+
+{% block messages %}
+{% endblock messages %}
+{% block notifications %}
+{% endblock notifications %}
+
+{% block user_menu_body %}
+{% endblock user_menu_body %}
+
+{% block search_form %}
+{# put custom search here #}
+{% endblock search_form %}
+
+{% block sidebar_menu_header %}
+SITE DIRECTORY
+{% endblock sidebar_menu_header %}
+        
+{% block page_title  %}
+Hanyu Pro
+{% endblock page_title  %}
+{% block page_subtitle  %}
+Learn Chinese with Hanyu!
+{% endblock page_subtitle  %}
+
+{% block breadcrumb %}
+<li><a href="{% url 'home' %}"><i class="fa fa-dashboard"></i> Home</a></li>
+{% endblock breadcrumb %}
+
+{% block right_footer  %}
+    A <a href="http://www.chip.org">Chipy</a> Mentorship Project
+{% endblock right_footer  %}
+
+{% block left_footer %}
+The Hanyu Project
+{% endblock left_footer %}
