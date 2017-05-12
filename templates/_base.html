@@ -1,4 +1,5 @@
 {% extends "_AdminLTE.html" %}
+{% load AdminLTE %}
 {% load static %}
 
 {% block title %}
@@ -32,8 +33,12 @@ Learn Chinese with Hanyu!
 {% endblock page_subtitle  %}
 
 {% block breadcrumb %}
-<li><a href="{% url 'home' %}"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li><a href="{% url 'home' %}"><i class="fa fa-dashboard"></i> Home</a></li>
 {% endblock breadcrumb %}
+
+{% block treeview_menu %}
+    {% menu_tree %}
+{% endblock treeview_menu %}
 
 {% block right_footer  %}
     A <a href="http://www.chip.org">Chipy</a> Mentorship Project

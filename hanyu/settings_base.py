@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'analysis',
     'dictionary',
     'learning_tools',
+    'hanyu',
 ]
 
 MIDDLEWARE = [
@@ -128,3 +129,12 @@ STFORD_SEG_SETTINGS = {
     'path_to_model': os.path.join(STFD_SEG_DIR, 'data', 'pku.gz'),
     'path_to_dict': os.path.join(STFD_SEG_DIR, 'data', 'dict-chris6.ser.gz'),
 }
+
+
+# TODO: This is garbage. Just parse a string.
+SITE_MENU = [
+                {'heading':'heading1', 'links':[{'url':'url1', 'desc':'desc1'},
+                                                {'url':'url2', 'desc':'desc2'},]
+                }
+            ]
+
