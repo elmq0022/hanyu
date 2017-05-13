@@ -13,7 +13,7 @@ from . import forms
 
 class LoginView(generic.FormView):
     form_class = AuthenticationForm
-    success_url = reverse_lazy('accounts:home')
+    success_url = reverse_lazy('accounts:profile')
     template_name = 'accounts/login.html'
 
     def get_form(self, form_class=None):
@@ -51,5 +51,5 @@ class Home(LoginRequiredMixin, TemplateView):
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated():
-            return HttpResponseRedirect(reverse('hanyu:home'))
+            return HttpResponseRedirect(reverse('home'))
         return super().dispatch(request, *args, **kwargs)

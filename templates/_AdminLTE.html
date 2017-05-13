@@ -498,7 +498,7 @@
 
     <!-- Main content -->
     <section class="content">
-
+      {% block content_box %}
       <!-- Default box -->
       <div class="box">
         <div class="box-header with-border">
@@ -521,7 +521,10 @@
         <!-- /.box-footer-->
       </div>
       <!-- /.box -->
+      {% endblock content_box %}
 
+      {% block content %}
+      {% endblock content %}
     </section>
     <!-- /.content -->
   </div>
