@@ -1,12 +1,25 @@
-{% extends "full_page.html" %}
+{% extends "_base.html" %}
 
 {% block content %}
-    {% if results %}
-        {% for r in results %}
-            <a href="{% url 'dictionary:entry' r.pk %}">{{ r }}</a>: {{ r.definitions }}
+
+    {{ searched }} <br />
+
+    {% if search_type == "0" %}
+        {% for entry in entry_list %}
+            <a href="{% url 'dictionary:entry' entry.pk %}">{{ entry }}</a>: {{ entry.definitions }}
             <br />
         {% endfor %}
+    {% elif search_type == "1" %}
+        {% for key, value in entry_list %}
+            {{ key }} 
+                <ul>
+                    {% for i in value %}
+                        <li> <a href="{% url 'dictionary:entry' i.pk %}">{{ i.definitions }}</a></li>
+                    {% endfor %}
+                </ul>
+        {% endfor %}
     {% else %}
-        No results to display.
+            No results to display.
     {% endif %}
+
 {% endblock content %}

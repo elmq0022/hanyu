@@ -15,65 +15,6 @@ from nltk.tokenize import stanford_segmenter
 from . import forms, models
 
 
-# class SearchView(FormView):
-#     '''
-#     This is a full text search of all of the items in a Dictionary Entry.
-#     '''
-#     template_name = 'dictionary/search.html'
-
-#     def get(self, request, *args, **kwargs):
-#         self.results = None
-#         form = forms.SearchForm(request.GET or None)
-#         if form.is_valid():
-#             search_text = form.cleaned_data['search_text']
-#             search_vector = SearchVector('simple', 'traditional', 'pin_yin', 'definitions')
-#             self.results = (
-#                 models.Entry.objects.annotate(search=search_vector).filter(search=search_text))
-#             form = forms.SearchForm()
-#         return self.render_to_response(self.get_context_data(form=form))
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['results'] = self.results
-#         return context
-
-
-# class FullChineseSearchView(FormView):
-#     template_name = "dictionary/full_search.html"
-
-#     def get(self, request, *args, **kwargs):
-#         self.results = None
-#         self.search_terms = None
-#         self.search_text = None
-#         form = forms.SearchForm(request.GET or None)
-#         if form.is_valid():
-#             self.search_text = form.cleaned_data['search_text']
-#             self.search_terms = jieba.cut(self.search_text)
-#             # self.results = {} 
-#             self.results = [] 
-
-#             for search_term in self.search_terms:
-#                 entry = models.Entry.objects.filter(simple=search_term)
-#                 if entry:
-#                     # self.results[search_term] = entry
-#                     self.results.append((search_term, entry))
-#                 else:
-#                     for character in search_term:
-#                         # self.results[character] = models.Entry.objects.filter(simple=character)
-#                         self.results.append((character,
-#                                              models.Entry.objects.filter(simple=character)))
-#             form = forms.SearchForm()
-
-#         return self.render_to_response(self.get_context_data(form=form))
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['search_terms'] = self.search_terms
-#         context['results'] = self.results
-#         context['searched'] = self.search_text
-#         return context
-
-
 class EntryView(TemplateView):
     template_name = 'dictionary/entry.html'
 
@@ -91,7 +32,7 @@ class EntryView(TemplateView):
 
 
 class SearchAny(TemplateView):
-    template_name = 'dictionary/search2.html'
+    template_name = 'dictionary/search.html'
     model = models.Entry
 
     def word_search(self, search_text):
