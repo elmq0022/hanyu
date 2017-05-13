@@ -31,8 +31,9 @@ class EntryView(TemplateView):
         return context
 
 
-class SearchAny(TemplateView):
+class SearchAny(ListView):
     template_name = 'dictionary/search.html'
+    context_object_name = 'entry_list'
     model = models.Entry
 
     def word_search(self, search_text):
@@ -57,7 +58,7 @@ class SearchAny(TemplateView):
                     results.append((character, models.Entry.objects.filter(simple=character)))
         return results
 
-    def get_entry_list(self):
+    def get_queryset(self):
         self.searched = self.request.GET.get('search_text')
         self.search_type = self.request.GET.get('search_type')
 
@@ -72,7 +73,6 @@ class SearchAny(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(*kwargs)
-        context['entry_list'] = self.get_entry_list()
         context['searched'] = self.searched
         context['search_type'] = self.search_type
         return context
