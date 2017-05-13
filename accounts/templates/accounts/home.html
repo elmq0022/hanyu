@@ -1,5 +1,9 @@
 {% extends "_base.html" %}
 
+{% block title %}
+{{ block.super }} Profile
+{% endblock title %}
+
 {% block content %}
     <p>Top Characters to Learn</p> 
     {% for character in  view.top_characters %}

@@ -11,9 +11,11 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   {% endblock meta %}
 
-  {% block title %}
-  <title>AdminLTE 2 | Blank Page</title>
-  {% endblock title %}
+  <title>
+    {% block title %}
+      AdminLTE 2 | Blank Page
+    {% endblock title %}
+  </title>
 
   {% block style %}
   <!-- Bootstrap 3.3.6 -->
@@ -44,7 +46,7 @@
   <header class="main-header">
     <!-- Logo -->
     {% block logo %}
-    <a href="../../index2.html" class="logo">
+    <a href="{% url 'home' %}" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini">
           {% block logo_mini %}
@@ -93,7 +95,7 @@
                   <li><!-- start message -->
                     <a href="#">
                       <div class="pull-left">
-                        {# <img src="../../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image"> #}
+                        {% gravitar size='160' %}
                       </div>
                       <h4>
                         Support Team
@@ -176,12 +178,13 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               {# <img src="{% static 'dist/img/user2-160x160.jpg' %}" class="user-image" alt="ME Image"> #}
               {% gravitar size='160' class='user-image'  %}
-              <span class="hidden-xs">Alexander Pierce</span>
+              <span class="hidden-xs"> {{ user.username }}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="{% static 'dist/img/user2-160x160.jpg' %}" class="img-circle" alt="User Image">
+                {# <img src="{% static 'dist/img/user2-160x160.jpg' %}" class="img-circle" alt="User Image"> #}
+                {% gravitar size='160' class='img-cirle' %}
                 <p>
                   {{ user.username }}
                   <small>{{ user.date_joined }} </small>
@@ -249,7 +252,8 @@
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="{% static 'dist/img/user2-160x160.jpg' %}" class="img-circle" alt="User Image">
+          {# <img src="{% static 'dist/img/user2-160x160.jpg' %}" class="img-circle" alt="User Image"> #}
+          {% gravitar size='160' class='img-cirle' %}
         </div>
         <div class="pull-left info">
           <p>{{ user.username }}</p>
