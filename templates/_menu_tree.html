@@ -1,16 +1,14 @@
 
-{% for item in menu %}
     <li class="treeview">
         <a href="#">
-        <i class=  "fa fa-dashboard" ></i> <span> {{ item.heading }} </span>
+        <i class=  "fa fa-dashboard" ></i> <span> {{ heading }} </span>
         <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
         </span>
         </a>
         <ul class="treeview-menu">
-        {% for link in item.links %}
+        {% for link in links %}
             <li><a href="{{ link.url }}"><i class="fa fa-circle-o"></i>{{ link.desc }}</a></li>
         {% endfor %}
         </ul>
     </li>
-{% endfor %}

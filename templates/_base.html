@@ -37,7 +37,8 @@ Learn Chinese with Hanyu!
 {% endblock breadcrumb %}
 
 {% block treeview_menu %}
-    {% menu_tree %}
+    {% menu_tree 'Accounts' 'accounts:login' 'Login' 'accounts:logout' 'Logout' 'accounts:register' 'Register' 'accounts:profile' 'Profile'%}
+    {% menu_tree 'Learning Tools' 'learning:update_word_status' 'Word Status' %}
 {% endblock treeview_menu %}
 
 {% block right_footer  %}
