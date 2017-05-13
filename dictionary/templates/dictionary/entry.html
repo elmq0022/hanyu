@@ -1,5 +1,7 @@
 
+{% extends "_base.html" %}
 
+{% block content %}
 <p>traditional: {{ entry.traditional }}</p>
 <p>simple: {{ entry.simple }}</p>
 <p>pinyin: {{ entry.pin_yin }}</p>
@@ -10,3 +12,4 @@
 <p>some thing here...{{ top_related }} </p>
 
 <p>Status: Unlearned | Learning | Learned</p>
+{% endblock content %}
