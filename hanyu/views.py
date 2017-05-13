@@ -7,5 +7,5 @@ class Home(TemplateView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated():
-            return HttpResponseRedirect(reverse('accounts:home'))
+            return HttpResponseRedirect(reverse('accounts:profile'))
         return super().get(request, *args, **kwargs)
