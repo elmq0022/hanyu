@@ -213,16 +213,15 @@
                   <a href="#" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                  <a href="{% url 'accounts:logout' %}" class="btn btn-default btn-flat">Sign out</a>
                 </div>
               </li>
             </ul>
           </li>
         {% else %}
-        {# TODO: Add Login Link#}
-        <li>
-          <a href="{% url 'accounts:login' %}"><i class="fa fa-sign-in"></i>Login</a>
-        </li>
+          <li>
+            <a href="{% url 'accounts:login' %}"><i class="fa fa-sign-in"></i>Login</a>
+          </li>
         {% endif %}
         {% endblock user_account %}
 
