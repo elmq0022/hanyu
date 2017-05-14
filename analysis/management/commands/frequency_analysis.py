@@ -19,9 +19,6 @@ class Command(BaseCommand):
     '''
 
     def __init__(self):
-        # os.environ['JAVAHOME'] = settings.JAVAHOME
-        # os.environ['CLASSPATH'] = settings.CLASSPATH
-        # self.segmenter = stanford_segmenter.StanfordSegmenter(**settings.STFORD_SEG_SETTINGS)
         super().__init__()
 
 
@@ -72,7 +69,6 @@ class Command(BaseCommand):
 
     def update_word_counts(self, content):
         segments = jieba.cut(content)
-        # results = self.segmenter.segment(content).split()
         self.word_counts.update(Counter(segments))
 
     def load_to_db(self, counts, count_type, entries):

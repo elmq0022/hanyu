@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'analysis',
     'dictionary',
     'learning_tools',
+    'hanyu',
 ]
 
 MIDDLEWARE = [
@@ -108,7 +109,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 
 
 # Files Paths for the Stanford Segmenter. This is a java library accesed via
@@ -125,3 +129,12 @@ STFORD_SEG_SETTINGS = {
     'path_to_model': os.path.join(STFD_SEG_DIR, 'data', 'pku.gz'),
     'path_to_dict': os.path.join(STFD_SEG_DIR, 'data', 'dict-chris6.ser.gz'),
 }
+
+
+# TODO: This is garbage. Just parse a string.
+SITE_MENU = [
+                {'heading':'heading1', 'links':[{'url':'url1', 'desc':'desc1'},
+                                                {'url':'url2', 'desc':'desc2'},]
+                }
+            ]
+

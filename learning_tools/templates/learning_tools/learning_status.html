@@ -1,5 +1,8 @@
 
+{% extends "_base.html" %}
 
-{% for word in word_learning_status %}
-<p> {{ word }} </p>
-{% endfor %}
+{% block content %}
+    {% for word in word_learning_status %}
+    <p> {{ word }} </p>
+    {% endfor %}
+{% endblock content %}

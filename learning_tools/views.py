@@ -28,7 +28,7 @@ class WordStatusView(LoginRequiredMixin, TemplateView):
 class WordStatusUpdateView(FormView):
     template_name = 'learning_tools/word_status_update.html'
     form_class = WordStatusUpdateForm
-    success_url = reverse_lazy('learning:word_status_update')
+    success_url = reverse_lazy('learning:update_word_status')
 
     def form_valid(self, form):
         words = form.cleaned_data['words']

@@ -1,12 +1,10 @@
-{% extends "nav_bar.html" %}
+{% extends "_base.html" %}
 
-{% block body %}
-{{ block.super }}
-<div class="container">
-    Hello {{ user.username }}
-    <p>Search the CC-CEDICT entries <a href="{% url 'dictionary:search' %}">here</a>.</p>
-    <p>Search complete Chinese sentences <a href="{% url 'dictionary:full_search' %}">here</a>.</p>
+{% block title %}
+{{ block.super }} Profile
+{% endblock title %}
 
+{% block content %}
     <p>Top Characters to Learn</p> 
     {% for character in  view.top_characters %}
         <ul>
@@ -20,6 +18,4 @@
             <li>{{ word.entry }}</li>
         </ul>
     {% endfor %}
-
-</div>
-{% endblock body %}
+{% endblock content %}
