@@ -6,3 +6,4 @@ stanford_segmenter_resources/
 resources/
 .vscode/
 .cache
+static/
