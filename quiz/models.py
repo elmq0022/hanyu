@@ -11,7 +11,7 @@ from dictionary.models import Entry
 class Quiz(models.Model):
     '''
     This model represents a single quiz question.
-    The response will be recorded as no response, incorrect, or correct.
+    The response will be recorded as no-response, incorrect, or correct.
     Results will be stored for the purpose of analysis.
     Both the questions and answers will be represented by foreign keys
     to a dictionary.Entry.
@@ -22,13 +22,13 @@ class Quiz(models.Model):
     answer = models.ForeignKey(Entry)
     date = models.DateTimeField()
 
-    NO_RESPONSE = 'N'
-    INCORRECT = 'I'
-    CORRECT = 'C'
+    NO_RESPONSE = 'NR'
+    INCORRECT = 'IC'
+    CORRECT = 'CR'
     RESPONSE = (
         (NO_RESPONSE, 'no response'),
         (INCORRECT, 'incorrect'),
         (CORRECT, 'correct'),
     )
 
-    response = models.CharField(max_length=1, choices=RESPONSE, default=NO_RESPONSE)
+    response = models.CharField(max_length=2, choices=RESPONSE, default=NO_RESPONSE)
