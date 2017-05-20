@@ -18,8 +18,8 @@ class Quiz(models.Model):
     '''
     user = models.ForeignKey(User)
     uid = models.UUIDField(primary_key=True)
-    question = models.ForeignKey(Entry)
-    answer = models.ForeignKey(Entry)
+    correct_answer = models.IntegerField()
+    answers = models.ForeignKey(Entry)
     date = models.DateTimeField()
 
     NO_RESPONSE = 'NR'
