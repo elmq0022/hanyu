@@ -1,6 +1,106 @@
 {% extends "_base.html" %}
 
 {% block content %}
+    <!-- general form elements -->
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">Quiz</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form role="form">
+              <div class="box-body">
+                <div class="form-group">
+                  <label for="exampleInputFile" id="question">File input</label>
+                </div>
+                <div id="answers">
+                </div> 
+              </div>
+              <!-- /.box-body -->
+
+              <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </form>
+          </div>
+          <!-- /.box -->
+    
     {% csrf_token %}
     {{ count }}
+    <div class="form-group">
+    <form action="">
+        <div class="input-group" id="answers"></div>
+    </form>
+    </div>
 {% endblock content %}
+
+{% block javascript  %}
+    {{ block.super }}
+    <script>
+        $(document).ready(main());
+
+        function setQuestion(data){
+            var questionDiv = $("#question");
+            var answerDiv = $("#answers");
+
+            questionDiv.empty();
+            answerDiv.empty();
+
+            questionDiv.append('<p>' + data.question + "</p>");
+
+                
+            var answerList = []; 
+            var beg = '<div class="checkbox"><label><input type="radio" name="answer" value=';
+            var mid = '>'
+            var end = '<\/label><\/div>'
+            for(var i=0; i < data.answers.length; i++){
+                answerList.push(beg + data.answers[i].pk + mid + data.answers[i].definition + end);
+            }
+
+            answerDiv.append(answerList.join(""));
+            answerDiv.append(getCookie('csrftoken'));
+        }
+
+        function main(){
+            var url = "/quiz/json";
+
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken",  getCookie("csrftoken"));
+                    }
+                }
+            });
+
+            $.getJSON(
+                url,
+            )
+            .done(function(data){
+                setQuestion(data);
+            })
+        }
+
+        // start getCookie
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        } // end getCookie
+
+    </script>
+
+{% endblock javascript  %}
