@@ -2,64 +2,33 @@
 
 {% block content %}
     <!-- general form elements -->
-          <div class="box box-primary">
-            <div class="box-header with-border">
-              <h3 class="box-title">Quiz</h3>
-            </div>
-            <!-- /.box-header -->
-            <!-- form start -->
-            <form role="form">
-              <div class="box-body">
-                <div class="form-group">
-                  <label for="exampleInputFile" id="question">File input</label>
-                </div>
-                <div id="answers">
-                </div> 
-              </div>
-              <!-- /.box-body -->
-
-              <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </div>
-            </form>
-          </div>
-          <!-- /.box -->
-    
-    {% csrf_token %}
-    {{ count }}
-    <div class="form-group">
-    <form action="">
-        <div class="input-group" id="answers"></div>
+    <div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">Quiz</h3>
+    </div>
+    <!-- /.box-header -->
+    <!-- form start -->
+    <form role="form" onsubmit="return submitAnswer();">
+        {% csrf_token %}
+        <div class="box-body">
+        <div class="form-group">
+            <label id="question"></label>
+        </div>
+            <div id="answers"> </div> 
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer">
+            <button class="btn btn-primary">Submit</button>
+        </div>
     </form>
     </div>
+    <!-- /.box -->
 {% endblock content %}
 
 {% block javascript  %}
     {{ block.super }}
     <script>
         $(document).ready(main());
-
-        function setQuestion(data){
-            var questionDiv = $("#question");
-            var answerDiv = $("#answers");
-
-            questionDiv.empty();
-            answerDiv.empty();
-
-            questionDiv.append('<p>' + data.question + "</p>");
-
-                
-            var answerList = []; 
-            var beg = '<div class="checkbox"><label><input type="radio" name="answer" value=';
-            var mid = '>'
-            var end = '<\/label><\/div>'
-            for(var i=0; i < data.answers.length; i++){
-                answerList.push(beg + data.answers[i].pk + mid + data.answers[i].definition + end);
-            }
-
-            answerDiv.append(answerList.join(""));
-            answerDiv.append(getCookie('csrftoken'));
-        }
 
         function main(){
             var url = "/quiz/json";
@@ -84,6 +53,11 @@
             })
         }
 
+        function submitAnswer(){
+            alert("Did you click me?");
+            return false;
+        }
+
         // start getCookie
         function getCookie(name) {
             var cookieValue = null;
@@ -101,6 +75,22 @@
             return cookieValue;
         } // end getCookie
 
+        function setQuestion(data){
+            var questionDiv = $("#question");
+            var answerDiv = $("#answers");
+            var answerList = []; 
+            var beg = '<div class="checkbox"><label><input type="radio" name="answer" value=';
+            var mid = '>'
+            var end = '<\/label><\/div>'
+
+            questionDiv.empty();
+            answerDiv.empty();
+            questionDiv.append('<p>' + data.question + "</p>");
+            for(var i=0; i < data.answers.length; i++){
+                answerList.push(beg + data.answers[i].pk + mid + data.answers[i].definition + end);
+            }
+            answerDiv.append(answerList.join(""));
+        }
     </script>
 
 {% endblock javascript  %}
