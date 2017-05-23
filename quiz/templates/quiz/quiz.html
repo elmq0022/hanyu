@@ -63,8 +63,9 @@
 
             $.ajax({
                 type: "POST",
-                url: "/quiz/json/",
-                data: JSON.stringify({quiz_id: "1", answer_id: "2"}),
+                url: "/quiz/answer/",
+                //JSON.stringify
+                data: {quiz_id: 1, answer_id: 2},
                 success: function(){alert("Success!")},
                 dataType: "json"
             });

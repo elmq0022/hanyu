@@ -2,7 +2,9 @@ from random import randint, sample
 
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
+from django.http import HttpResponse
 from .json_response_mixin import JSONResponseMixin
+import json
 
 
 from .models import Quiz
@@ -32,8 +34,15 @@ class QuizJSON(JSONResponseMixin, TemplateView):
     '''
     def render_to_response(self, context, **kwargs):
         return self.render_to_json_response(context, **kwargs)
-    
+ 
     def get_data(self, context):
         q = Quiz.objects.get(pk="9279f903-aa86-47f1-b313-82da028dd0e0")
         context = q.to_json()
         return context
+
+
+def answer_question(request):
+    if request.method == "POST":
+        data = request.POST
+        print(data)
+        return HttpResponse(json.dumps(data), content_type="application/json")
