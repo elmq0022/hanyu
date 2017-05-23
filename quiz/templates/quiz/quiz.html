@@ -33,10 +33,6 @@
         function main(){
             var url = "/quiz/json";
 
-            function csrfSafeMethod(method) {
-                // these HTTP methods do not require CSRF protection
-                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-            }
             $.ajaxSetup({
                 beforeSend: function(xhr, settings) {
                     if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -54,7 +50,26 @@
         }
 
         function submitAnswer(){
-            alert("Did you click me?");
+            var selectedAnswerID = $("input[name='answer']:checked").val();
+            alert(selectedAnswerID);
+            alert(getCookie("csrftoken"));
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken",  getCookie("csrftoken"));
+                    }
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "/quiz/json/",
+                data: JSON.stringify({quiz_id: "1", answer_id: "2"}),
+                success: function(){alert("Success!")},
+                dataType: "json"
+            });
+
+            //Don't let the form return
             return false;
         }
 
@@ -84,12 +99,18 @@
             var end = '<\/label><\/div>'
 
             questionDiv.empty();
-            answerDiv.empty();
             questionDiv.append('<p>' + data.question + "</p>");
+
+            answerDiv.empty();
             for(var i=0; i < data.answers.length; i++){
                 answerList.push(beg + data.answers[i].pk + mid + data.answers[i].definition + end);
             }
             answerDiv.append(answerList.join(""));
+        }
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
         }
     </script>
 

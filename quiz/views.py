@@ -32,7 +32,7 @@ class QuizJSON(JSONResponseMixin, TemplateView):
     '''
     def render_to_response(self, context, **kwargs):
         return self.render_to_json_response(context, **kwargs)
-
+    
     def get_data(self, context):
         q = Quiz.objects.get(pk="9279f903-aa86-47f1-b313-82da028dd0e0")
         context = q.to_json()
