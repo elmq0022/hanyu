@@ -25,7 +25,6 @@ def answer_question(request):
         uid = data['uid']
         q = Quiz.objects.get(uid=uid)
         a = Answer.objects.get(pk=data['answer_pk'])
-        print(q, a)
         return HttpResponse(json.dumps(data), content_type="application/json")
     if request.method == "GET":
         q = Quiz.objects.get(pk="9279f903-aa86-47f1-b313-82da028dd0e0")
