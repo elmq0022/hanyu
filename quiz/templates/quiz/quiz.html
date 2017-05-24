@@ -8,7 +8,7 @@
     </div>
     <!-- /.box-header -->
     <!-- form start -->
-    <form role="form" onsubmit="return submitAnswer();">
+    <form role="form" id="quiz-form" >
         {% csrf_token %}
         <div class="box-body">
         <div class="form-group">
@@ -31,16 +31,10 @@
         $(document).ready(main());
 
         function main(){
-            var url = "/quiz/json";
+            // setQuestion();
 
-            $.ajaxSetup({
-                beforeSend: function(xhr, settings) {
-                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                        xhr.setRequestHeader("X-CSRFToken",  getCookie("csrftoken"));
-                    }
-                }
-            });
-
+            var url = "/quiz/json/";
+            setupAjax();
             $.getJSON(
                 url,
             )
@@ -49,32 +43,43 @@
             })
         }
 
-        function submitAnswer(){
-            var selectedAnswerID = $("input[name='answer']:checked").val();
-            alert(selectedAnswerID);
-            alert(getCookie("csrftoken"));
-            $.ajaxSetup({
-                beforeSend: function(xhr, settings) {
-                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                        xhr.setRequestHeader("X-CSRFToken",  getCookie("csrftoken"));
-                    }
-                }
-            });
+        function setQuestion(data){
 
+            var questionDiv = $("#question");
+            var answerDiv = $("#answers");
+            var answerList = []; 
+            var beg = '<div class="checkbox"><label><input type="radio" name="answer" value=';
+            var mid = '>'
+            var end = '<\/label><\/div>'
+
+            questionDiv.empty();
+            questionDiv.append('<p>' + data.question + "</p>");
+            questionDiv.addClass(data.uid)
+
+            answerDiv.empty();
+            for(var i=0; i < data.answers.length; i++){
+                answerList.push(beg + data.answers[i].pk + mid + data.answers[i].definition + end);
+            }
+            answerDiv.append(answerList.join(""));
+        }
+
+        $("#quiz-form").submit(function(event){
+            event.preventDefault();
+            var selectedAnswerID = $("input[name='answer']:checked").val();
+            var quizID = $("#question").attr("class");
+            alert(quizID);
+            // alert(selectedAnswerID);
+            // alert(getCookie("csrftoken"));
+            setupAjax();
             $.ajax({
                 type: "POST",
                 url: "/quiz/answer/",
-                //JSON.stringify
                 data: {quiz_id: 1, answer_id: 2},
                 success: function(){alert("Success!")},
                 dataType: "json"
             });
+        }); 
 
-            //Don't let the form return
-            return false;
-        }
-
-        // start getCookie
         function getCookie(name) {
             var cookieValue = null;
             if (document.cookie && document.cookie !== '') {
@@ -89,29 +94,21 @@
                 }
             }
             return cookieValue;
-        } // end getCookie
-
-        function setQuestion(data){
-            var questionDiv = $("#question");
-            var answerDiv = $("#answers");
-            var answerList = []; 
-            var beg = '<div class="checkbox"><label><input type="radio" name="answer" value=';
-            var mid = '>'
-            var end = '<\/label><\/div>'
-
-            questionDiv.empty();
-            questionDiv.append('<p>' + data.question + "</p>");
-
-            answerDiv.empty();
-            for(var i=0; i < data.answers.length; i++){
-                answerList.push(beg + data.answers[i].pk + mid + data.answers[i].definition + end);
-            }
-            answerDiv.append(answerList.join(""));
-        }
+        } 
 
         function csrfSafeMethod(method) {
             // these HTTP methods do not require CSRF protection
             return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        function setupAjax(){
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken",  getCookie("csrftoken"));
+                    }
+                }
+            });
         }
     </script>
 
