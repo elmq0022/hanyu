@@ -42,7 +42,6 @@
                 setQuestion(data);
             })
         }
-
         function setQuestion(data){
             var questionDiv = $("#question");
             var answerDiv = $("#answers");
@@ -67,49 +66,17 @@
             e.preventDefault();
             var selectedAnswerID = $("input[name='answer']:checked").val();
             var quizID = $("#question").attr("class");
-            alert(quizID);
-            // alert(selectedAnswerID);
-            // alert(getCookie("csrftoken"));
+            console.log(quizID);
+            console.log(selectedAnswerID);
+            console.log(getCookie("csrftoken"));
             setupAjax();
             $.ajax({
                 type: "POST",
                 url: "/quiz/answer/",
                 data: {quiz_id: 1, answer_id: 2},
-                success: function(){alert("Success!")},
+                success: function(){console.debug("Success!")},
                 dataType: "json"
             });
         }); 
-
-        function getCookie(name) {
-            var cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = jQuery.trim(cookies[i]);
-                    // Does this cookie string begin with the name we want?
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        } 
-
-        function csrfSafeMethod(method) {
-            // these HTTP methods do not require CSRF protection
-            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-        }
-
-        function setupAjax(){
-            $.ajaxSetup({
-                beforeSend: function(xhr, settings) {
-                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                        xhr.setRequestHeader("X-CSRFToken",  getCookie("csrftoken"));
-                    }
-                }
-            });
-        }
     </script>
-
 {% endblock javascript  %}
