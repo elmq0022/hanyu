@@ -20,8 +20,6 @@ class Quiz(models.Model):
     '''
     user = models.ForeignKey(User)
     uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    # probably redundant
-    correct_answer = models.IntegerField()
     date = models.DateTimeField()
 
     NO_RESPONSE = 'NR'
@@ -43,7 +41,7 @@ class Quiz(models.Model):
         quiz_dict = {
             'user_id': self.user.pk,
             'uid': str(self.uid),
-            'question': Entry.objects.get(pk=self.correct_answer).simple,
+            'question': [ans.entry.simple for ans in self.answer_set.all() if ans.correct][0],
             'answers': [{'pk':ans.pk, 'definition':ans.entry.definitions} for ans in self.answer_set.all()]
             }
         return quiz_dict

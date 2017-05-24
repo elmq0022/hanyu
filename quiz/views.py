@@ -1,12 +1,11 @@
+import json
 from random import randint, sample
 
-from django.shortcuts import render
-from django.views.generic.base import TemplateView
 from django.http import HttpResponse
+from django.views.generic.base import TemplateView
+from django.views.generic.edit import FormView
+
 from .json_response_mixin import JSONResponseMixin
-import json
-
-
 from .models import Quiz
 
 
@@ -18,16 +17,18 @@ class QuizView(TemplateView):
     '''
     template_name = 'quiz/quiz.html'
 
-    def get_random_quiz(self):
-        count = Quiz.objects.all().count()
-        return count
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['count'] = self.get_random_quiz()
-        return context
+def answer_question(request):
+    if request.method == "POST":
+        data = request.POST
+        return HttpResponse(json.dumps(data), content_type="application/json")
+    if request.method == "GET":
+        q = Quiz.objects.get(pk="9279f903-aa86-47f1-b313-82da028dd0e0")
+        return HttpResponse(json.dumps(q.to_json()), content_type="application/json")
 
 
+# Consider using a class based view with a form later.
+# Right now get just get the above working.
 class QuizJSON(JSONResponseMixin, TemplateView):
     '''
     This view will serve the quiz as a JSON object.
@@ -39,10 +40,3 @@ class QuizJSON(JSONResponseMixin, TemplateView):
         q = Quiz.objects.get(pk="9279f903-aa86-47f1-b313-82da028dd0e0")
         context = q.to_json()
         return context
-
-
-def answer_question(request):
-    if request.method == "POST":
-        data = request.POST
-        print(data)
-        return HttpResponse(json.dumps(data), content_type="application/json")

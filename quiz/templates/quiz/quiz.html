@@ -33,7 +33,7 @@
         function main(){
             // setQuestion();
 
-            var url = "/quiz/json/";
+            var url = "/quiz/answer/";
             setupAjax();
             $.getJSON(
                 url,
@@ -44,27 +44,27 @@
         }
 
         function setQuestion(data){
-
             var questionDiv = $("#question");
             var answerDiv = $("#answers");
             var answerList = []; 
-            var beg = '<div class="checkbox"><label><input type="radio" name="answer" value=';
-            var mid = '>'
-            var end = '<\/label><\/div>'
 
             questionDiv.empty();
             questionDiv.append('<p>' + data.question + "</p>");
             questionDiv.addClass(data.uid)
 
             answerDiv.empty();
+            var checkBoxHTML = function(ans){
+                return '<div class="checkbox"><label><input type="radio" name="answer" value=' + 
+                        ans.pk + '>' + ans.definition + '<\/label><\/div>';
+            }
             for(var i=0; i < data.answers.length; i++){
-                answerList.push(beg + data.answers[i].pk + mid + data.answers[i].definition + end);
+                answerList.push(checkBoxHTML(data.answers[i]));
             }
             answerDiv.append(answerList.join(""));
         }
 
-        $("#quiz-form").submit(function(event){
-            event.preventDefault();
+        $("#quiz-form").submit(function(e){
+            e.preventDefault();
             var selectedAnswerID = $("input[name='answer']:checked").val();
             var quizID = $("#question").attr("class");
             alert(quizID);
