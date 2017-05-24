@@ -48,7 +48,7 @@ class Quiz(models.Model):
         return json.dumps(quiz_dict)
 
     def __str__(self):
-        return "".format(self.user.pk, self.uid, self.response)
+        return "{} {} {}".format(self.user.pk, self.uid, self.response)
 
 
 class Answer(models.Model):
