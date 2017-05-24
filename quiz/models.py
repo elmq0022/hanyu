@@ -2,6 +2,7 @@
 Models for the quiz application.
 '''
 
+import json
 import uuid
 
 from django.contrib.auth.admin import User
@@ -44,7 +45,7 @@ class Quiz(models.Model):
             'question': [ans.entry.simple for ans in self.answer_set.all() if ans.correct][0],
             'answers': [{'pk':ans.pk, 'definition':ans.entry.definitions} for ans in self.answer_set.all()]
             }
-        return quiz_dict
+        return json.dumps(quiz_dict)
 
 
 class Answer(models.Model):

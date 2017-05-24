@@ -8,7 +8,7 @@
     </div>
     <!-- /.box-header -->
     <!-- form start -->
-    <form role="form" id="quiz-form" >
+    <form role="form" id="quiz-form">
         {% csrf_token %}
         <div class="box-body">
         <div class="form-group">
@@ -31,8 +31,6 @@
         $(document).ready(main());
 
         function main(){
-            // setQuestion();
-
             var url = "/quiz/answer/";
             setupAjax();
             $.getJSON(
@@ -49,7 +47,7 @@
 
             questionDiv.empty();
             questionDiv.append('<p>' + data.question + "</p>");
-            questionDiv.addClass(data.uid)
+            $("#quiz-form").data("uid", data.uid)
 
             answerDiv.empty();
             var checkBoxHTML = function(ans){
@@ -65,7 +63,7 @@
         $("#quiz-form").submit(function(e){
             e.preventDefault();
             var selectedAnswerID = $("input[name='answer']:checked").val();
-            var quizID = $("#question").attr("class");
+            var quizID = $("#quiz-form").data("uid");
             console.log(quizID);
             console.log(selectedAnswerID);
             console.log(getCookie("csrftoken"));
@@ -73,7 +71,7 @@
             $.ajax({
                 type: "POST",
                 url: "/quiz/answer/",
-                data: {quiz_id: 1, answer_id: 2},
+                data: {uid: quizID, answer_pk: selectedAnswerID },
                 success: function(){console.debug("Success!")},
                 dataType: "json"
             });

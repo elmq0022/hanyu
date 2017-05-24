@@ -6,6 +6,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 
 from .json_response_mixin import JSONResponseMixin
+from .models import Answer
 from .models import Quiz
 
 
@@ -21,10 +22,14 @@ class QuizView(TemplateView):
 def answer_question(request):
     if request.method == "POST":
         data = request.POST
+        uid = data['uid']
+        q = Quiz.objects.get(uid=uid)
+        a = Answer.objects.get(pk=data['answer_pk'])
+        print(q, a)
         return HttpResponse(json.dumps(data), content_type="application/json")
     if request.method == "GET":
         q = Quiz.objects.get(pk="9279f903-aa86-47f1-b313-82da028dd0e0")
-        return HttpResponse(json.dumps(q.to_json()), content_type="application/json")
+        return HttpResponse(q.to_json(), content_type="application/json")
 
 
 # Consider using a class based view with a form later.
