@@ -48,7 +48,7 @@ class Quiz(models.Model):
         return json.dumps(quiz_dict)
 
     def __str__(self):
-        return "{} {} {}".format(self.user.pk, self.uid, self.response)
+        return "user: {} quiz uid: {} reponse: {}".format(self.user.username, self.uid, self.response)
 
 
 class Answer(models.Model):
@@ -61,4 +61,4 @@ class Answer(models.Model):
     correct = models.BooleanField(default=False)
 
     def __str__(self):
-        return "{} {} {}".format(self.quiz.uid, self.entry.simple, self.correct)
+        return "quiz: {} chinese: {} correct: {}".format(self.quiz.uid, self.entry.simple, self.correct)
