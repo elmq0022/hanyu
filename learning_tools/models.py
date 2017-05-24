@@ -5,6 +5,7 @@ from dictionary.models import Entry
 
 
 class WordLearningStatus(models.Model):
+    # TODO: This class needs a better name...
     UNLEARNED = 'UN'
     ACQUIRING = 'AC'
     LEARNED = 'LN'
