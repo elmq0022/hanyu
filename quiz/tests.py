@@ -1,17 +1,16 @@
-from django.test import TestCase
-from django.contrib.auth.admin import User
+import os
 
-from .views import create_quiz
 import pytest
-
-from dictionary.models import Entry
-from learning_tools.models import WordLearningStatus
-from quiz.models import Quiz, Answer
+from django.contrib.auth.admin import User
+from django.test import TestCase
 
 from dictionary.management.commands import load_cedict
-
+from dictionary.models import Entry
 from hanyu.settings_dev import BASE_DIR  # Fix this so it's right.
-import os
+from learning_tools.models import WordLearningStatus
+from quiz.models import Answer, Quiz
+
+from .views import create_quiz
 
 
 class CreateTestEntries(load_cedict.Command):
@@ -64,4 +63,3 @@ def setup_db():
 def test_create_quiz():
     setup_db()
     assert User.objects.all().count() == 2
-    
