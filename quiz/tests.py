@@ -1,8 +1,10 @@
 import os
+from datetime import datetime
 
 import pytest
 from django.contrib.auth.admin import User
 from django.test import TestCase
+from django.utils.timezone import utc
 
 from dictionary.management.commands import load_cedict
 from dictionary.models import Entry
@@ -29,7 +31,7 @@ def make_word_status(user, entries, status):
         w = WordLearningStatus(
            entry = e,
            user = user,
-           learning_status = status 
+           learning_status = status
         )
         w.save()
 
@@ -54,12 +56,19 @@ def setup_db():
     entries_user_two = Entry.objects.all()[20:40]
     make_word_status(user_one, entries_user_one[:10], WordLearningStatus.ACQUIRING)
     make_word_status(user_one, entries_user_one[10:20], WordLearningStatus.LEARNED)
-    make_word_status(user_two, entries_user_one[20:30], WordLearningStatus.ACQUIRING)
-    make_word_status(user_two, entries_user_one[30:40], WordLearningStatus.LEARNED)
+    make_word_status(user_two, entries_user_two[20:30], WordLearningStatus.ACQUIRING)
+    make_word_status(user_two, entries_user_two[30:40], WordLearningStatus.LEARNED)
 
 
 # Create your tests here.
 @pytest.mark.django_db
 def test_create_quiz():
-    setup_db()
+    setup_db() # this should be a fixture at somepoint ...
     assert User.objects.all().count() == 2
+    user = User.objects.all()[0]
+    context = create_quiz(user)
+    assert Quiz.objects.all().count() == 1
+    quiz = Quiz.objects.all()[0]
+    assert quiz.date <= datetime.now(utc)
+    assert quiz.answer_set.all().count() == 6
+    assert quiz.answer_set.filter(correct=True).count() == 1
