@@ -31,7 +31,7 @@
         $(document).ready(main());
 
         function main(){
-            var url = "/quiz/answer/";
+            var url = "/quiz/data/";
             setupAjax();
             $.getJSON(
                 url,
@@ -64,13 +64,10 @@
             e.preventDefault();
             var selectedAnswerID = $("input[name='answer']:checked").val();
             var quizID = $("#quiz-form").data("uid");
-            console.log(quizID);
-            console.log(selectedAnswerID);
-            console.log(getCookie("csrftoken"));
             setupAjax();
             $.ajax({
                 type: "POST",
-                url: "/quiz/answer/",
+                url: "/quiz/data/",
                 data: {uid: quizID, answer_pk: selectedAnswerID },
                 success: function(){console.debug("Success!")},
                 dataType: "json"

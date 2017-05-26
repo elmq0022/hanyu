@@ -23,16 +23,20 @@ class QuizView(TemplateView):
     template_name = 'quiz/quiz.html'
 
 
-def answer_question(request):
+def quiz_data(request):
     if request.method == "POST":
         data = request.POST
         uid = data['uid']
-        q = Quiz.objects.get(uid=uid)
-        a = Answer.objects.get(pk=data['answer_pk'])
-        return HttpResponse(json.dumps(data), content_type="application/json")
+        quiz = Quiz.objects.get(uid=uid)
+        answer = Answer.objects.get(pk=data['answer_pk'])
+        quiz.response = Quiz.CORRECT if answer.correct else Quiz.INCORRECT
+        quiz.save()
+        result = {'result': answer.correct}
+        return HttpResponse(json.dumps(result), content_type="application/json")
+
     if request.method == "GET":
-        q = Quiz.objects.get(pk="9279f903-aa86-47f1-b313-82da028dd0e0")
-        return HttpResponse(q.to_json(), content_type="application/json")
+        quiz = create_quiz(request.user, 3)
+        return HttpResponse(quiz.to_json(), content_type="application/json")
 
 
 def create_quiz(user, num_answers=6):
@@ -42,10 +46,12 @@ def create_quiz(user, num_answers=6):
                )
     quiz.save()
 
-    count = WLS.objects.filter(
-        Q(user=user),
-        Q(learning_status=WLS.ACQUIRING) | Q(learning_status=WLS.LEARNED)).count()
+    count = WLS.objects.filter(Q(user=user),
+                               Q(learning_status=WLS.ACQUIRING) |
+                               Q(learning_status=WLS.LEARNED)
+                              ).count()
 
+    num_answers = min(num_answers, count)
 
     word_query_set = WLS.objects.filter(
         Q(user=user),
@@ -56,11 +62,9 @@ def create_quiz(user, num_answers=6):
 
     correct = random.randint(0, num_answers-1)
     for i, word in enumerate(words):
-        Answer(quiz=quiz,
-               entry=word.entry,
-               correct=(i == correct)
-              ).save()
+        Answer(quiz=quiz, entry=word.entry, correct=(i == correct)).save()
 
+    return quiz
 
 # Consider using a class based view with a form later.
 # Right now just get the above working.
