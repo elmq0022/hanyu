@@ -6,6 +6,10 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse
+
 
 from dictionary.models import Entry
 from learning_tools.models import WordLearningStatus as WLS
@@ -14,7 +18,7 @@ from .json_response_mixin import JSONResponseMixin
 from .models import Answer, Quiz
 
 
-class QuizView(TemplateView):
+class QuizView(LoginRequiredMixin, TemplateView):
     '''
     Serve the template for quiz application.
     This is need simply to extend the _base.html template
@@ -23,6 +27,7 @@ class QuizView(TemplateView):
     template_name = 'quiz/quiz.html'
 
 
+@login_required() # This seems to work without specifying the redirect.  Probably because I used the django defaults.
 def quiz_data(request):
     if request.method == "POST":
         data = request.POST
