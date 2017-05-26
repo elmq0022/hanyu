@@ -28,19 +28,21 @@
 {% block javascript  %}
     {{ block.super }}
     <script>
-        $(document).ready(main());
+        $(document).ready(setQuestion());
 
-        function main(){
+        function setQuestion(){
             var url = "/quiz/data/";
             setupAjax();
             $.getJSON(
                 url,
             )
             .done(function(data){
-                setQuestion(data);
+                question(data);
             })
         }
-        function setQuestion(data){
+        
+        function question(data){
+
             var questionDiv = $("#question");
             var answerDiv = $("#answers");
             var answerList = []; 
@@ -71,6 +73,9 @@
                 data: {uid: quizID, answer_pk: selectedAnswerID },
                 success: function(){console.debug("Success!")},
                 dataType: "json"
+            }).done(function(data){
+                alert(data["result"]);
+                setQuestion();
             });
         }); 
     </script>
