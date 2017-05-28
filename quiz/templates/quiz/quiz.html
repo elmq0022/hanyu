@@ -60,10 +60,10 @@
                 answerList.push(checkBoxHTML(data.answers[i]));
             }
             answerDiv.append(answerList.join(""));
+            $('input[type=radio]').on('change', submitForm);
         }
 
-        $("#quiz-form").submit(function(e){
-            e.preventDefault();
+        function submitForm(){
             var selectedAnswerID = $("input[name='answer']:checked").val();
             var quizID = $("#quiz-form").data("uid");
             setupAjax();
@@ -77,6 +77,6 @@
                 alert(data["result"]);
                 setQuestion();
             });
-        }); 
+        }; 
     </script>
 {% endblock javascript  %}
