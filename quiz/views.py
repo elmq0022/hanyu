@@ -33,10 +33,11 @@ def quiz_data(request):
         data = request.POST
         uid = data['uid']
         quiz = Quiz.objects.get(uid=uid)
-        answer = Answer.objects.get(pk=data['answer_pk'])
-        quiz.response = Quiz.CORRECT if answer.correct else Quiz.INCORRECT
+        answers = quiz.answer_set.all()
+        correct_answer = answers.filter(correct=True).all()[0]
+        quiz.response = Quiz.CORRECT if correct_answer.pk == data['answer_pk'] else Quiz.INCORRECT
         quiz.save()
-        result = {'result': answer.correct}
+        result = {'correct_pk': correct_answer.pk}
         return HttpResponse(json.dumps(result), content_type="application/json")
 
     if request.method == "GET":

@@ -17,10 +17,10 @@
             <div id="answers"> </div> 
         </div>
         <!-- /.box-body -->
-        <div class="box-footer">
-            <button class="btn btn-primary">Submit</button>
-        </div>
     </form>
+        <div class="box-footer">
+            <button class="btn btn-primary" id="next-question-btn">Next Question</button>
+        </div>
     </div>
     <!-- /.box -->
 {% endblock content %}
@@ -28,7 +28,10 @@
 {% block javascript  %}
     {{ block.super }}
     <script>
-        $(document).ready(setQuestion());
+        $(document).ready(function(){
+            $('#next-question-btn').click(setQuestion);
+            setQuestion()
+         });
 
         function setQuestion(){
             var url = "/quiz/data/";
@@ -60,22 +63,29 @@
                 answerList.push(checkBoxHTML(data.answers[i]));
             }
             answerDiv.append(answerList.join(""));
+            $("#next-question-btn").hide();
             $('input[type=radio]').on('change', submitForm);
         }
 
         function submitForm(){
-            var selectedAnswerID = $("input[name='answer']:checked").val();
+            var selectedAnswer = $("input[name='answer']:checked");
             var quizID = $("#quiz-form").data("uid");
             setupAjax();
             $.ajax({
                 type: "POST",
                 url: "/quiz/data/",
-                data: {uid: quizID, answer_pk: selectedAnswerID },
+                data: {uid: quizID, answer_pk: selectedAnswer.val()},
                 success: function(){console.debug("Success!")},
                 dataType: "json"
             }).done(function(data){
-                alert(data["result"]);
-                setQuestion();
+                if(data.correct_pk === String(selectedAnswer.val())){
+                    selectedAnswer.parent().css({background: "green"})
+                } else {
+                    selectedAnswer.parent().css({background: "red"})
+                    $("input[value='"+ data.correct_pk +"']").parent().css({background: "green"})
+                }
+                $("input[name='answer']").off();
+                $("#next-question-btn").show();
             });
         }; 
     </script>
