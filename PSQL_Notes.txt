@@ -1,5 +1,6 @@
 loging into db
 - $psql -U hanyu hanyu_db 
+this is for the big data sql
 
 general superuser account on postgres bigsql db;
 - $psql -U postgres
@@ -10,3 +11,11 @@ connecting to a db from a general log-in
 get the pg_trm up and running
 - $ CREATE EXTENSION pg_trm
 - Must be super user.
+
+
+Getting pytest to work with postgres when db access is required
+=> ALTER USER django CREATEDB;
+Note: The username used in the ALTER USER <username> CREATEDB; command needs to match the database user in your 
+Django settings files. In this case, the original poster, had the user as django the above answer.
+
+https://stackoverflow.com/questions/14186055/django-test-app-error-got-an-error-creating-the-test-database-permission-deni
