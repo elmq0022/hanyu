@@ -20,7 +20,7 @@ class CreateTestEntries(load_cedict.Command):
         '''
         Overload to return data from a local static file for testing purposes.
         This is a smaller set of static data.
-        '''jjjjjjjj
+        '''
         with open(os.path.join(BASE_DIR, "hanyu", "resources", "min_cedict.txt"), encoding="utf8") as f:
             data = f.read()
         return data
