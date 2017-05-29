@@ -1,15 +1,22 @@
-
 {% extends "_base.html" %}
+{% load bootstrap3 %}
 
 {% block content %}
-<p>traditional: {{ entry.traditional }}</p>
-<p>simple: {{ entry.simple }}</p>
-<p>pinyin: {{ entry.pin_yin }}</p>
-<p>definition: {{ entry.definitions }}</p>
-
-<p>Related words and characters:</p>
-
+{% if messages %}
+    {% for message in messages  %}
+        {% bootstrap_alert message %} 
+    {% endfor %}
+{% endif %}
+<p><h3>Entry</h3></p>
+<p><strong>Traditional</strong>: {{ entry.traditional }}</p>
+<p><strong>Simple</strong>:  {{ entry.simple }}</p>
+<p><strong>Pinyin</strong>:  {{ entry.pin_yin }}</p>
+<p><strong>Definition</strong>:  {{ entry.definitions }}</p>
+<p><strong>Related</strong>:</p>
 <p>some thing here...{{ top_related }} </p>
-
-<p>Status: Unlearned | Learning | Learned</p>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
 {% endblock content %}
