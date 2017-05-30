@@ -43,13 +43,22 @@ class SignUpView(generic.CreateView):
 class Home(LoginRequiredMixin, TemplateView):
     template_name = 'accounts/home.html'
 
-    def top_characters(self):
+    def get_top_characters(self):
         return Count.objects.filter(count_type=Count.CHARACTER).all().order_by('-count')[:5] 
 
-    def top_words(self):
+    def get_top_words(self):
         return Count.objects.filter(count_type=Count.WORD).all().order_by('-count')[:5] 
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated():
             return HttpResponseRedirect(reverse('home'))
         return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        top_characters = self.get_top_characters()
+        top_words = self.get_top_words()
+        context['top_characters'] = top_characters
+        context['top_words'] = top_words
+        return context
+        

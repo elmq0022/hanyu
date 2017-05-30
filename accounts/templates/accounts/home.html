@@ -6,16 +6,16 @@
 
 {% block content %}
     <p>Top Characters to Learn</p> 
-    {% for character in  view.top_characters %}
+    {% for character in  top_characters %}
         <ul>
-            <li>{{ character.entry }}</li>
+            <li><a href="{{ character.entry.get_absolute_url }}">{{ character.entry }}</a></li>
         </ul>
     {% endfor %}
 
     <p>Top Words</p> 
-    {% for word in  view.top_words %}
+    {% for word in  top_words %}
         <ul>
-            <li>{{ word.entry }}</li>
+            <li><a href="{{ word.entry.get_absolute_url }}">{{ word.entry }}</a></li>
         </ul>
     {% endfor %}
 {% endblock content %}
