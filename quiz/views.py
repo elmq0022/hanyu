@@ -40,7 +40,7 @@ def quiz_data(request):
         result = {'correct_pk': correct_answer.pk}
         return HttpResponse(json.dumps(result), content_type="application/json")
 
-    if request.method == "GET":
+    else:
         quiz = create_quiz(request.user, 3)
         return HttpResponse(quiz.to_json(), content_type="application/json")
 
