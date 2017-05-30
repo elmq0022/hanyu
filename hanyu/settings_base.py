@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'dictionary',
     'learning_tools',
     'hanyu',
+    'quiz',
 ]
 
 MIDDLEWARE = [

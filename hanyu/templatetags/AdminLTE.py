@@ -8,24 +8,41 @@ from django.contrib.staticfiles.templatetags.staticfiles import static
 register = template.Library()
 
 
-@register.inclusion_tag('_menu_tree.html', takes_context=True)
-def menu_tree(context, heading, *args):
+@register.inclusion_tag('_menu_tree_open.html', takes_context=True)
+def menu_tree_open(context, heading):
     '''
-    This is a tag used to build the AdminLTE 2 tree menu
-    The first argument is the menu heading.
-    The following arguments are alternating namespace:urls and the description
+    heading         := Menu heading
+    descriptions    := list of sub-menu link descriptions
+    urls            := list of sub-menu urls
+    args            := list of tuples of keyword, argument pairs [((k,a),..., (k,a)),..., ((k,a),...) ]
     '''
-    links = []
-    for url, desc in zip(args[0::2], args[1::2]):
-        links.append({'url':reverse(url), 'desc':desc})
-
     context['heading'] = heading
-    context['links'] = links
+    return context
+
+
+@register.inclusion_tag('_menu_tree_item.html', takes_context=True)
+def menu_tree_item(context, url_namespace, description, *args):
+    '''
+    description    := list of sub-menu link descriptions
+    url            := list of sub-menu urls
+    '''
+    extra = {a: b for a, b in zip(args[0::2], args[1::2])} if args else None
+    link = reverse(url_namespace, kwargs=extra)
+    context['description'] = description
+    context['link'] = link
+    return context
+
+
+@register.inclusion_tag('_menu_tree_close.html', takes_context=True)
+def menu_tree_close(context):
     return context
 
 
 @register.simple_tag(takes_context=True)
 def gravitar(context, **kwargs):
+    '''
+    Link to a user's gravatar based on their supplied email.
+    '''
     html = r'<img src="https://www.gravatar.com/avatar/{}?d={}"?s={}/ class="{}" alt="User Image">'
     image_id = '00000000000000000000000000000000'
     image_size = kwargs.get('size', 20)

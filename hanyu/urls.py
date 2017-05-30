@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^dictionary/', include('dictionary.urls', namespace='dictionary')),
     url(r'^learning/', include('learning_tools.urls', namespace='learning')),
+    url(r'^quiz/', include('quiz.urls', namespace='quiz')),
 ]

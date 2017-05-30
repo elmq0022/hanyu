@@ -1,0 +1,92 @@
+{% extends "_base.html" %}
+
+{% block content %}
+    <!-- general form elements -->
+    <div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">Quiz</h3>
+    </div>
+    <!-- /.box-header -->
+    <!-- form start -->
+    <form role="form" id="quiz-form">
+        {% csrf_token %}
+        <div class="box-body">
+        <div class="form-group">
+            <label id="question"></label>
+        </div>
+            <div id="answers"> </div> 
+        </div>
+        <!-- /.box-body -->
+    </form>
+        <div class="box-footer">
+            <button class="btn btn-primary" id="next-question-btn">Next Question</button>
+        </div>
+    </div>
+    <!-- /.box -->
+{% endblock content %}
+
+{% block javascript  %}
+    {{ block.super }}
+    <script>
+        $(document).ready(function(){
+            $('#next-question-btn').click(setQuestion);
+            setQuestion()
+         });
+
+        function setQuestion(){
+            var url = "/quiz/data/";
+            setupAjax();
+            $.getJSON(
+                url,
+            )
+            .done(function(data){
+                question(data);
+            })
+        }
+        
+        function question(data){
+
+            var questionDiv = $("#question");
+            var answerDiv = $("#answers");
+            var answerList = []; 
+
+            questionDiv.empty();
+            questionDiv.append('<p>' + data.question + "</p>");
+            $("#quiz-form").data("uid", data.uid)
+
+            answerDiv.empty();
+            var checkBoxHTML = function(ans){
+                return '<div class="checkbox"><label><input type="radio" name="answer" value=' + 
+                        ans.pk + '>' + ans.definition + '<\/label><\/div>';
+            }
+            for(var i=0; i < data.answers.length; i++){
+                answerList.push(checkBoxHTML(data.answers[i]));
+            }
+            answerDiv.append(answerList.join(""));
+            $("#next-question-btn").hide();
+            $('input[type=radio]').on('change', submitForm);
+        }
+
+        function submitForm(){
+            var selectedAnswer = $("input[name='answer']:checked");
+            var quizID = $("#quiz-form").data("uid");
+            setupAjax();
+            $.ajax({
+                type: "POST",
+                url: "/quiz/data/",
+                data: {uid: quizID, answer_pk: selectedAnswer.val()},
+                success: function(){console.debug("Success!")},
+                dataType: "json"
+            }).done(function(data){
+                if(data.correct_pk === String(selectedAnswer.val())){
+                    selectedAnswer.parent().css({background: "green"})
+                } else {
+                    selectedAnswer.parent().css({background: "red"})
+                    $("input[value='"+ data.correct_pk +"']").parent().css({background: "green"})
+                }
+                $("input[name='answer']").off();
+                $("#next-question-btn").show();
+            });
+        }; 
+    </script>
+{% endblock javascript  %}

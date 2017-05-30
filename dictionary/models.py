@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse_lazy
 
 
 class Entry(models.Model):
@@ -9,3 +10,6 @@ class Entry(models.Model):
 
     def __str__(self):
         return '{0}: {1}'.format(self.simple, self.pin_yin)
+
+    def get_absolute_url(self):
+        return reverse_lazy('dictionary:entry', kwargs={'pk': self.pk}) 

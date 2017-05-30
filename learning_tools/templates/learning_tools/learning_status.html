@@ -3,6 +3,6 @@
 
 {% block content %}
     {% for word in word_learning_status %}
-    <p> {{ word }} </p>
+    <a href="{{ word.entry.get_absolute_url }}"><button>{{ word.entry.simple }}</button></a>
     {% endfor %}
 {% endblock content %}

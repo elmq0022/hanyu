@@ -14,7 +14,7 @@ class WordStatusView(LoginRequiredMixin, TemplateView):
 
     def word_learning_status(self):
         '''
-        Return a list of words the user know by the learning status
+        Return a list of words the user knows by the learning status
         attribute.
         '''
         return WordLearningStatus.objects.filter(user=self.request.user).filter(learning_status=self.kwargs['status']).all()

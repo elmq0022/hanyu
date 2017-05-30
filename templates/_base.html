@@ -53,8 +53,23 @@ Learn Chinese with Hanyu!
 {% endblock breadcrumb %}
 
 {% block treeview_menu %}
-    {% menu_tree 'Accounts' 'accounts:login' 'Login' 'accounts:logout' 'Logout' 'accounts:register' 'Register' 'accounts:profile' 'Profile'%}
-    {% menu_tree 'Learning Tools' 'learning:update_word_status' 'Word Status' %}
+    {% menu_tree_open 'Accounts' %}
+    {% menu_tree_item 'accounts:login' 'Login' %}  
+    {% menu_tree_item 'accounts:logout' 'Logout' %} 
+    {% menu_tree_item 'accounts:register' 'Register' %} 
+    {% menu_tree_item 'accounts:profile' 'Profile' %}
+    {% menu_tree_close %} 
+
+    {% menu_tree_open 'Learning Tools' %}
+    {% menu_tree_item 'learning:update_word_status' 'Word Status' %}
+    {% menu_tree_item 'learning:word_status' 'Acquiring' 'status' 'AC' %}
+
+    {% menu_tree_item 'learning:word_status' 'Learned' 'status' 'LN' %}
+    {% menu_tree_close %}
+
+    {% menu_tree_open 'Quiz' %}
+    {% menu_tree_item 'quiz:quiz' 'Multiple Choice' %}
+    {% menu_tree_close %}
 {% endblock treeview_menu %}
 
 {% block content_box %}
@@ -65,7 +80,7 @@ Say Hello to Hanyu
 {% endblock content %}
 
 {% block right_footer  %}
-    A <a href="http://www.chip.org">Chipy</a> Mentorship Project
+    A <a href="http://www.chipy.org">Chipy</a> Mentorship Project
 {% endblock right_footer  %}
 
 {% block left_footer %}
@@ -77,3 +92,39 @@ The Hanyu Project
 
 {% block control_sidebar %}
 {% endblock control_sidebar %}
+
+{% block javascript %}
+{{ block.super }}
+<script>    
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    } 
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    function setupAjax(){
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken",  getCookie("csrftoken"));
+                }
+            }
+        });
+    }
+</script>
+{% endblock javascript %}
