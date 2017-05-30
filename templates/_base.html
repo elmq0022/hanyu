@@ -53,8 +53,23 @@ Learn Chinese with Hanyu!
 {% endblock breadcrumb %}
 
 {% block treeview_menu %}
-    {% menu_tree 'Accounts' 'accounts:login' 'Login' 'accounts:logout' 'Logout' 'accounts:register' 'Register' 'accounts:profile' 'Profile'%}
-    {% menu_tree 'Learning Tools' 'learning:update_word_status' 'Word Status' %}
+    {% menu_tree_open 'Accounts' %}
+    {% menu_tree_item 'accounts:login' 'Login' %}  
+    {% menu_tree_item 'accounts:logout' 'Logout' %} 
+    {% menu_tree_item 'accounts:register' 'Register' %} 
+    {% menu_tree_item 'accounts:profile' 'Profile' %}
+    {% menu_tree_close %} 
+
+    {% menu_tree_open 'Learning Tools' %}
+    {% menu_tree_item 'learning:update_word_status' 'Word Status' %}
+    {% menu_tree_item 'learning:word_status' 'Acquiring' 'status' 'AC' %}
+
+    {% menu_tree_item 'learning:word_status' 'Learned' 'status' 'LN' %}
+    {% menu_tree_close %}
+
+    {% menu_tree_open 'Quiz' %}
+    {% menu_tree_item 'quiz:quiz' 'Multiple Choice' %}
+    {% menu_tree_close %}
 {% endblock treeview_menu %}
 
 {% block content_box %}
